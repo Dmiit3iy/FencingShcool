@@ -8,6 +8,6 @@ public interface ApprenticeService {
     void add(Apprentice apprentice);
     List<Apprentice> get();
     Apprentice get(long id);
-    Apprentice update(ApprenticeService apprentice);
-    Apprentice delete(long id);
+    Apprentice update(Apprentice apprentice);
+    Apprentice delete(Long id);
 }
