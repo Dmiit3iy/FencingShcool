@@ -1,5 +1,6 @@
 package org.dmiit3iy.service;
 
+
 import org.dmiit3iy.model.Apprentice;
 import org.dmiit3iy.repository.ApprenticeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 public class ApprenticeServiceImp implements ApprenticeService {
@@ -53,7 +55,7 @@ public class ApprenticeServiceImp implements ApprenticeService {
 
     @Override
     public Apprentice delete(Long id) {
-        Apprentice apprentice = apprenticeRepository.getById(id);
+        Apprentice apprentice = get(id);
         apprenticeRepository.deleteById(id);
         return apprentice;
     }

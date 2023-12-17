@@ -39,17 +39,17 @@ public class TrainerServiceImp implements TrainerService {
 
     @Override
     public Trainer update(Trainer trainer) {
-        Trainer base = trainerRepository.getById(trainer.getId());
+        Trainer base = get(trainer.getId());
         base.setName(trainer.getName());
         base.setSurname(trainer.getSurname());
         base.setExperience(trainer.getExperience());
         base.setPatronymic(trainer.getPatronymic());
-        return null;
+        return base;
     }
 
     @Override
     public Trainer delete(long id) {
-        Trainer trainer = trainerRepository.getById(id);
+        Trainer trainer = get(id);
         trainerRepository.deleteById(id);
         return trainer;
     }

@@ -1,0 +1,85 @@
+POST localhost:8080/user
+content-type:application/json
+
+{
+  "login" : "admin",
+  "password" : "admin",
+  "name" : "Main Admin"
+
+}
+###
+POST localhost:8080/user
+content-type:application/json
+
+{
+  "login" : "qwer",
+  "password" : "1234",
+  "name" : "Admin"
+
+}
+
+###
+GET localhost:8080/user?login=admin&password=admin
+###
+GET localhost:8080/user?login=qwerty&password=123
+###
+GET localhost:8080/user/1
+###
+DELETE localhost:8080/user/1
+
+###
+POST localhost:8080/apprentice
+content-type:application/json
+
+{
+  "surname" : "Ivanov",
+  "name" : "Ivan",
+  "patronymic" : "Ivanovich",
+  "phoneNumber" : "89199999999"
+
+}
+
+###
+PUT localhost:8080/apprentice
+content-type:application/json
+
+{
+  "id": 6,
+  "surname" : "Ivanov",
+  "name" : "Ivan",
+  "patronymic" : "Ivanovich",
+  "phoneNumber" : "89199999991"
+
+}
+
+###
+DELETE localhost:8080/apprentice/4
+
+###
+POST localhost:8080/trainer
+content-type:application/json
+
+{
+  "surname" : "Ivanov",
+  "name" : "Ivan",
+  "patronymic" : "Ivanovich",
+  "experience" : 25
+
+}
+
+###
+PUT localhost:8080/trainer
+content-type:application/json
+
+{
+  "id": 2,
+  "surname" : "Ivanov",
+  "name" : "Ivan",
+  "patronymic" : "Ivanovich",
+  "experience" : 27
+
+}
+
+
+###
+DELETE localhost:8080/trainer/1
