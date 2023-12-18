@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class TrainerSсhedul {
+public class TrainerSchedule {
     @Id
     @Column(name = "trainer_id")
     private long id;
@@ -67,5 +67,13 @@ public class TrainerSсhedul {
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
-
+    public void setScedule(String day, LocalTime start, LocalTime end) {
+        try {
+            this.getClass().getDeclaredField(day + "Start").set(this, start);
+            this.getClass().getDeclaredField(day + "End").set(this, end);
+        } catch (IllegalAccessException ignored) {
+        } catch (NoSuchFieldException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
 }
