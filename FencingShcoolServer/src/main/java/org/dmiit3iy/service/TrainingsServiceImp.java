@@ -140,6 +140,19 @@ public class TrainingsServiceImp implements TrainingsService {
         return true;
     }
 
+    //Метод подсчета количества учеников у тренера в заданный промежуток времени
+    public boolean isTrainerBusy(long idTrainer, LocalDate date, LocalTime time){
+        int countOfApprentice=0;
+        LocalTime timeEndOfTraining = time.plusMinutes(90);
+        List<Training> trainingList = this.trainingRepository.findTrainingByTrainerIdAndDate(idTrainer,date);
+        for (Training training : trainingList) {
+            if(isOverlapping(training.getTimeStart(),training.getTimeStart().plusMinutes(90),time,timeEndOfTraining)) countOfApprentice++;
+        }
+        if(countOfApprentice>=3){
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Метод для определения пересечений временных отрезков
