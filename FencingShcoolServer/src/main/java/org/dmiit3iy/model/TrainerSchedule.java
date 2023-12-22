@@ -1,6 +1,7 @@
 package org.dmiit3iy.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -65,6 +66,7 @@ public class TrainerSchedule {
     @NonNull
     @MapsId
     @JoinColumn(name = "trainer_id")
+    @JsonIgnore
     private Trainer trainer;
 
     public void setScedule(String day, LocalTime start, LocalTime end) {

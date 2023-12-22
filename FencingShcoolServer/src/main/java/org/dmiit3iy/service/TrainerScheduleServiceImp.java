@@ -10,10 +10,17 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+
 @Service
 public class TrainerScheduleServiceImp implements TrainerScheduleService {
     private TrainerRepository trainerRepository;
+    private TrainerService trainerService;
     private TrainerScheduleRepository trainerScheduleRepository;
+
+    @Autowired
+    public void setTrainerService(TrainerService trainerService) {
+        this.trainerService = trainerService;
+    }
 
     @Autowired
     public void setTrainerRepository(TrainerRepository trainerRepository) {
@@ -24,56 +31,57 @@ public class TrainerScheduleServiceImp implements TrainerScheduleService {
     public void setTrainerScheduleRepository(TrainerScheduleRepository trainerScheduleRepository) {
         this.trainerScheduleRepository = trainerScheduleRepository;
     }
-//проверить
+
+    //проверить
     @Override
     public TrainerSchedule add(long id, String day, LocalTime start, LocalTime end) {
         Trainer trainer = this.trainerRepository.getById(id);
         TrainerSchedule trainerSchedule = trainer.getTrainerSсhedul();
-        if(trainerSchedule == null){
+        if (trainerSchedule == null) {
             trainerSchedule = new TrainerSchedule();
             trainerSchedule.setTrainer(trainer);
         }
-        trainerSchedule.setScedule(day,start,end);
+        trainerSchedule.setScedule(day, start, end);
         this.trainerScheduleRepository.save(trainerSchedule);
-
         return trainerSchedule;
     }
-// удаление на вход id и день недели(установить туда null)
+
     // получение всего расписания
     @Override
     public TrainerSchedule get(long id) {
-        return this.trainerScheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Schedule does not exists!"));
+        Trainer trainer = this.trainerService.get(id);
+        return  trainer.getTrainerSсhedul();
+    }
+
+
+    // удаление на вход id и день недели(установить туда null)
+    @Override
+    public TrainerSchedule delete(long id, String day) {
+        Trainer trainer = this.trainerService.get(id);
+
+        TrainerSchedule trainerSchedule = trainer.getTrainerSсhedul();
+        trainerSchedule.setScedule(day,null,null);
+        return trainerSchedule;
     }
 
     @Override
     public TrainerSchedule update(TrainerSchedule trainerSchedule) {
         TrainerSchedule base = get(trainerSchedule.getId());
-        base.setFridayEnd(trainerSchedule.getFridayEnd());
-        base.setFridayStart(trainerSchedule.getFridayStart());
-        base.setMondayEnd(trainerSchedule.getMondayEnd());
-        base.setMondayStart(trainerSchedule.getMondayStart());
-        base.setThursdayEnd(trainerSchedule.getThursdayEnd());
-        base.setTuesdayStart(trainerSchedule.getTuesdayStart());
-        base.setWednesdayEnd(trainerSchedule.getWednesdayEnd());
-        base.setWednesdayEnd(trainerSchedule.getWednesdayEnd());
-        base.setMondayEnd(trainerSchedule.getMondayEnd());
-        base.setMondayStart(trainerSchedule.getMondayStart());
-        base.setSaturdayEnd(trainerSchedule.getSaturdayEnd());
-        base.setSaturdayStart(trainerSchedule.getSaturdayStart());
         base.setSundayEnd(trainerSchedule.getSundayEnd());
         base.setSundayStart(trainerSchedule.getSundayStart());
-        try {
-            this.trainerScheduleRepository.save(base);
-            return trainerSchedule;
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException("This schedule is already exists!");
-        }
-    }
-
-    @Override
-    public TrainerSchedule delete(long id) {
-        TrainerSchedule trainerSchedule = get(id);
-        this.trainerScheduleRepository.deleteById(id);
+        base.setMondayEnd(trainerSchedule.getMondayEnd());
+        base.setMondayStart(trainerSchedule.getMondayEnd());
+        base.setTuesdayEnd(trainerSchedule.getTuesdayEnd());
+        base.setThursdayStart(trainerSchedule.getThursdayStart());
+        base.setWednesdayEnd(trainerSchedule.getWednesdayEnd());
+        base.setWednesdayStart(trainerSchedule.getWednesdayEnd());
+        base.setThursdayEnd(trainerSchedule.getThursdayEnd());
+        base.setThursdayStart(trainerSchedule.getThursdayStart());
+        base.setFridayEnd(trainerSchedule.getFridayEnd());
+        base.setFridayStart(trainerSchedule.getFridayStart());
+        base.setSaturdayEnd(trainerSchedule.getSaturdayEnd());
+        base.setSaturdayStart(trainerSchedule.getFridayEnd());
+        this.trainerScheduleRepository.save(base);
         return trainerSchedule;
     }
 }

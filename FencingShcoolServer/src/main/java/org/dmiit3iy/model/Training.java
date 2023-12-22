@@ -1,14 +1,18 @@
 package org.dmiit3iy.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.NonNull;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 @Entity
-@Table
+@Data
+@AllArgsConstructor
+@RequiredArgsConstructor
+@NoArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"apprentice_id", "date", "timeStart"}))
 public class Training {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
