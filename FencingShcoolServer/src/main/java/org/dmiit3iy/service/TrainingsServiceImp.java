@@ -38,34 +38,17 @@ public class TrainingsServiceImp implements TrainingsService {
     }
 
     @Override
-    public void add(long idTrainer, long idApprentice, Training training) {
+    public Training add(long idTrainer, long idApprentice, int numberGym, LocalDate date, LocalTime startTime) {
         Trainer trainer = this.trainerRepository.getById(idTrainer);
         Apprentice apprentice = this.apprenticeRepository.getById(idApprentice);
-        //добавить условие на проверку количества тренировок
-        LocalDate localDate = training.getDate();
-        List<Training> trainingList = getByTrainerId(idTrainer);
-        // из training  я получаю localdate, потом смотрю сколько у меня в trainingList'у существует пересечений
-        // тренгировок
-        //на аналогичный localdate (localtime по 90 минут), если меньше 3, то добавляю. для пересечения
-        // временм реализовать отдельный метод (есть на стек оверфлоу) набирете date/localtime overlapping
-
-        //проверка на наполняемость зала: нужно получить localdate и по этой дате посчитать сколько тренировок на эту дату у
-        //всех тренеров если сумм меньше 10 то добавляем (пересечение LocalTime в текущем зале в текущий день)
-
-
-        training.setTrainer(trainer);
-        training.setApprentice(apprentice);
-        try {
-            this.trainingRepository.save(training);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException("This training is already added!");
-        }
-
-    }
-
-    @Override
-    public void add(long idTrainer, long idApprentice, int numberGym, LocalDate date, LocalTime startTime) {
-
+        if (isWorkingTime(idTrainer, date, startTime) && isGymNotFull(numberGym, date, startTime) && isTrainerBusy(idTrainer, date, startTime)) {
+            try {
+                Training training = new Training(numberGym, trainer, apprentice, date, startTime);
+                return trainingRepository.save(training);
+            } catch (DataIntegrityViolationException e) {
+                throw new IllegalArgumentException("This training is already added");
+            }
+        } else throw new IllegalArgumentException("There is currently no way to sign up for a training session.");
     }
 
     @Override
@@ -86,7 +69,7 @@ public class TrainingsServiceImp implements TrainingsService {
 
     @Override
     public Training delete(long id) {
-        Training training = this.trainingRepository.getById(id);
+        Training training = get(id);
         this.trainingRepository.deleteById(id);
         return training;
     }
@@ -100,13 +83,10 @@ public class TrainingsServiceImp implements TrainingsService {
      * @return
      */
     public boolean isWorkingTime(long idTrainer, LocalDate date, LocalTime time) {
-        //Получаю предполагаемое время окончания тренировки
+
         LocalTime timeEndOfTraining = time.plusMinutes(90);
-        //Получаю название дня недели для которого буду смотреть расписание у тренера
         String day = date.getDayOfWeek().toString().toLowerCase();
-        //Получаю расписание тренера
         TrainerSchedule trainerSchedule = this.trainerRepository.getById(idTrainer).getTrainerSсhedul();
-        //
         try {
             Field field1 = trainerSchedule.getClass().getDeclaredField(day + "Start");
             field1.setAccessible(true);
@@ -114,7 +94,10 @@ public class TrainingsServiceImp implements TrainingsService {
             Field field2 = trainerSchedule.getClass().getDeclaredField(day + "End");
             field2.setAccessible(true);
             LocalTime end = (LocalTime) field2.get(trainerSchedule);
-            return isOverlapping(start,end,time,timeEndOfTraining);
+            if (!isOverlapping(start, end, time, timeEndOfTraining)) {
+                throw new IllegalArgumentException("Are you trying to make an appointment outside of business hours");
+            }
+            return true;
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -122,6 +105,7 @@ public class TrainingsServiceImp implements TrainingsService {
 
     /**
      * Метод для расчета наполняемости зала
+     *
      * @param numberOfGym
      * @param date
      * @param time
@@ -130,32 +114,35 @@ public class TrainingsServiceImp implements TrainingsService {
     public boolean isGymNotFull(int numberOfGym, LocalDate date, LocalTime time) {
         int countOfTraining = 0;
         LocalTime timeEndOfTraining = time.plusMinutes(90);
-        List<Training> trainingList = this.trainingRepository.findTrainingByNumberGymAAndAndDate(numberOfGym, date);
+        List<Training> trainingList = this.trainingRepository.findTrainingByNumberGymAndAndDate(numberOfGym, date);
         for (Training training : trainingList) {
-            if(isOverlapping(training.getTimeStart(),training.getTimeStart().plusMinutes(90),time,timeEndOfTraining)) countOfTraining++;
+            if (isOverlapping(training.getTimeStart(), training.getTimeStart().plusMinutes(90), time, timeEndOfTraining))
+                countOfTraining++;
         }
-        if(countOfTraining>10){
-            return false;
+        if (countOfTraining > 10) {
+            throw new IllegalArgumentException("At this time, 10 apprentices are already engaged in the gym");
         }
         return true;
     }
 
-    //Метод подсчета количества учеников у тренера в заданный промежуток времени
-    public boolean isTrainerBusy(long idTrainer, LocalDate date, LocalTime time){
-        int countOfApprentice=0;
+
+    public boolean isTrainerBusy(long idTrainer, LocalDate date, LocalTime time) {
+        int countOfApprentice = 0;
         LocalTime timeEndOfTraining = time.plusMinutes(90);
-        List<Training> trainingList = this.trainingRepository.findTrainingByTrainerIdAndDate(idTrainer,date);
+        List<Training> trainingList = this.trainingRepository.findTrainingByTrainerIdAndDate(idTrainer, date);
         for (Training training : trainingList) {
-            if(isOverlapping(training.getTimeStart(),training.getTimeStart().plusMinutes(90),time,timeEndOfTraining)) countOfApprentice++;
+            if (isOverlapping(training.getTimeStart(), training.getTimeStart().plusMinutes(90), time, timeEndOfTraining))
+                countOfApprentice++;
         }
-        if(countOfApprentice>=3){
-            return false;
+        if (countOfApprentice >= 3) {
+            throw new IllegalArgumentException("The coach has already enrolled 3 apprentice");
         }
         return true;
     }
 
     /**
      * Метод для определения пересечений временных отрезков
+     *
      * @param start1
      * @param end1
      * @param start2
@@ -165,4 +152,5 @@ public class TrainingsServiceImp implements TrainingsService {
     public static boolean isOverlapping(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
         return start1.isBefore(end2) && start2.isBefore(end1);
     }
+
 }

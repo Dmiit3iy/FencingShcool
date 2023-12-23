@@ -1,0 +1,23 @@
+###
+POST localhost:8080/training?idTrainer=1&idApprentice=4&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=2&idApprentice=4&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=2&idApprentice=5&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=3&idApprentice=7&numberGym=1&date=2023-12-25&startTime=09:00
+
+
+
+###
+POST localhost:8080/training?idTrainer=3&idApprentice=8&numberGym=1&date=2023-12-25&startTime=06:00
+###
+POST localhost:8080/training?idTrainer=4&idApprentice=10&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=4&idApprentice=11&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=1&idApprentice=4&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=1&idApprentice=4&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=1&idApprentice=4&numberGym=1&date=2023-12-25&startTime=09:00

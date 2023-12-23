@@ -77,5 +77,5 @@ public class TrainingController {
             return new ResponseEntity<>(new ResponseResult<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
     }
-    
+
 }

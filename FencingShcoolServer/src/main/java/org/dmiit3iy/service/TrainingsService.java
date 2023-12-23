@@ -7,8 +7,8 @@ import java.time.LocalTime;
 import java.util.List;
 
 public interface TrainingsService {
-    void add(long idTrainer, long idApprentice, Training training);
-    void add(long idTrainer, long idApprentice, int numberGym, LocalDate date, LocalTime startTime);
+   // void add(long idTrainer, long idApprentice, Training training);
+   Training add(long idTrainer, long idApprentice, int numberGym, LocalDate date, LocalTime startTime);
     Training get(long id);
     List<Training> getByTrainerId(long id);
     List<Training> getByApprenticeId(long id);

@@ -84,7 +84,74 @@ content-type:application/json
   "phoneNumber" : "89142224997"
 
 }
+###
+POST localhost:8080/apprentice
+content-type:application/json
 
+{
+"surname" : "Mavrin",
+"name" : "Ura",
+"patronymic" : "Piratovich",
+"phoneNumber" : "89142424997"
+
+}
+###
+POST localhost:8080/apprentice
+content-type:application/json
+
+{
+  "surname" : "Oborin",
+  "name" : "Jack",
+  "patronymic" : "Krukovich",
+  "phoneNumber" : "83942424933"
+
+}
+###
+POST localhost:8080/apprentice
+content-type:application/json
+
+{
+  "surname" : "Kipelov",
+  "name" : "Valeriy",
+  "patronymic" : "Krukovich",
+  "phoneNumber" : "83942421111"
+
+}
+
+###
+POST localhost:8080/apprentice
+content-type:application/json
+
+{
+  "surname" : "Sharikov",
+  "name" : "Sharik",
+  "patronymic" : "Pryamougolnikovich",
+  "phoneNumber" : "84942524433"
+
+}
+
+###
+POST localhost:8080/apprentice
+content-type:application/json
+
+{
+  "surname" : "Zuzyf",
+  "name" : "Vano",
+  "patronymic" : "Provodovich",
+  "phoneNumber" : "83977724933"
+
+}
+###
+POST localhost:8080/apprentice
+content-type:application/json
+
+{
+  "surname" : "Krylov",
+  "name" : "Chigik",
+  "patronymic" : "Yaychev",
+  "phoneNumber" : "82977724931"
+
+}
 
 ###
 PUT localhost:8080/apprentice
@@ -118,6 +185,17 @@ POST localhost:8080/trainer
 content-type:application/json
 
 {
+  "surname" : "Manson",
+  "name" : "Marlin",
+  "patronymic" : "Pupkin",
+  "experience" : 13
+
+}
+###
+POST localhost:8080/trainer
+content-type:application/json
+
+{
 "surname" : "Petrov",
 "name" : "Petr",
 "patronymic" : "Petrovich",
@@ -136,6 +214,19 @@ content-type:application/json
   "experience" : 2
 
 }
+
+###
+POST localhost:8080/trainer
+content-type:application/json
+
+{
+  "surname" : "Bobrov",
+  "name" : "Bobr",
+  "patronymic" : "Zubatovich",
+  "experience" : 12
+
+}
+
 
 ###
 PUT localhost:8080/trainer
@@ -158,12 +249,41 @@ DELETE localhost:8080/trainer/1
 POST localhost:8080/schedule/1?dayWeek=monday&start=10:00&end=12:00
 
 ###
+POST localhost:8080/schedule/2?dayWeek=monday&start=10:00&end=12:00
+
+###
+POST localhost:8080/schedule/3?dayWeek=monday&start=10:00&end=12:00
+
+###
 POST localhost:8080/schedule/1?dayWeek=tuesday&start=14:00&end=16:00
+###
+POST localhost:8080/schedule/2?dayWeek=monday&start=09:00&end=17:00
+
+###
+POST localhost:8080/schedule/3?dayWeek=monday&start=09:00&end=17:00
+
+###
+POST localhost:8080/schedule/4?dayWeek=monday&start=09:00&end=17:00
 
 ###
 GET localhost:8080/schedule/1
 
 ###
-PUT localhost:8080/schedule/1/update?dayWeek=tuesday&start=16:00&end=17:00
+PUT localhost:8080/schedule/1/update?dayWeek=monday&start=09:00&end=17:00
 ###
 DELETE localhost:8080/schedule/1?day=tuesday
+
+###
+POST localhost:8080/training?idTrainer=2&idApprentice=1&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=3&idApprentice=1&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=1&idApprentice=4&numberGym=1&date=2023-12-25&startTime=12:30
+###
+POST localhost:8080/training?idTrainer=3&idApprentice=9&numberGym=1&date=2023-12-25&startTime=09:00
+###
+DELETE localhost:8080/training/14
+###
+GET localhost:8080/training/apprentice/1
+###
+GET localhost:8080/training/trainer/2

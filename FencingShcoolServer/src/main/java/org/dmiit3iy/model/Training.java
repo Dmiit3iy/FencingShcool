@@ -1,6 +1,7 @@
 package org.dmiit3iy.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,9 +22,13 @@ public class Training {
     @Column(nullable = false)
     @NonNull
     private int numberGym;
+    @JsonIgnore
+    @NonNull
     @ManyToOne
     @JoinColumn(name = "trainer_id", nullable = false)
     private Trainer trainer;
+    @JsonIgnore
+    @NonNull
     @ManyToOne
     @JoinColumn(name = "apprentice_id", nullable = false)
     private Apprentice apprentice;
