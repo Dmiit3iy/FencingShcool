@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 /**
  * JavaFX App
@@ -18,7 +19,13 @@ public class Program extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("authorization"), 640, 480);
+
+        if (isAuthorization()){
+            scene = new Scene(loadFXML("main"), 640, 480);
+        } else {
+            scene = new Scene(loadFXML("authorization"), 640, 480);
+        }
+
         stage.setScene(scene);
         stage.show();
     }
@@ -42,6 +49,15 @@ public class Program extends Application {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    /**
+     * Метод для проверки авторизации
+     * @return
+     */
+    public static boolean isAuthorization() {
+        Preferences userlog = Preferences.userRoot();
+        return userlog.getBoolean("authorization", false);
     }
 
 }

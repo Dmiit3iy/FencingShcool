@@ -13,6 +13,8 @@ import org.dmiit3iy.model.User;
 import org.dmiit3iy.retrofit.UserRepository;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.util.prefs.Preferences;
 
 public class AuthorizationController {
     @FXML
@@ -25,20 +27,37 @@ public class AuthorizationController {
 
     @FXML
     public void buttonEnter(ActionEvent actionEvent) throws IOException {
-        login=textFieldLogin.getText();
-        password=textFieldPassword.getText();
+        login = textFieldLogin.getText();
+        password = textFieldPassword.getText();
         userRepository = new UserRepository();
-       User user= userRepository.get(login,password);
-       if(user!=null){
-           FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/main.fxml"));
-           Stage stage = new Stage(StageStyle.DECORATED);
-           stage.setScene(new Scene(loader.load()));
-           textFieldPassword.clear();
-           textFieldLogin.clear();
-           stage.show();
-       } else {
-           Program.showMessage("Mistake", "Incorrect login or password", Alert.AlertType.ERROR);
-       }
+        User user = null;
+        try {
+            user = userRepository.get(login, password);
+
+            if (user != null) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/main.fxml"));
+                Stage stage = new Stage(StageStyle.DECORATED);
+                stage.setScene(new Scene(loader.load()));
+
+                MainController mainController =loader.getController();
+                mainController.initData(user);
+
+                Preferences userlog = Preferences.userRoot();
+                Preferences userIDlog = Preferences.userRoot();
+                String userID = String.valueOf(user.getId());
+                userlog.putBoolean("authorization", true);
+                userIDlog.put("userID", userID);
+                textFieldPassword.clear();
+                textFieldLogin.clear();
+                stage.show();
+                Stage stage1 = (Stage) textFieldLogin.getScene().getWindow();
+                stage1.close();
+            } else {
+                Program.showMessage("Mistake", "Incorrect login or password", Alert.AlertType.ERROR);
+            }
+        } catch (ConnectException e) {
+            Program.showMessage("Warning", "There is no connection to the server", Alert.AlertType.WARNING);
+        }
 
     }
 
