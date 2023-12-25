@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.dmiit3iy.model.Apprentice;
@@ -19,7 +18,6 @@ import org.dmiit3iy.retrofit.ApprenticeRepository;
 import org.dmiit3iy.retrofit.TrainerRepository;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.prefs.Preferences;
 
 public class MainController {
@@ -63,7 +61,7 @@ public class MainController {
     }
 
     public void buttonAddTrainer(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/addTrainer.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/add.fxml"));
         Stage stage = new Stage(StageStyle.DECORATED);
         stage.setScene(new Scene(loader.load()));
         stage.show();

@@ -11,11 +11,8 @@
       <Label layoutX="459.0" layoutY="55.0" text="Список учеников" />
       <ListView fx:id="listViewTrainer" layoutX="22.0" layoutY="73.0" prefHeight="200.0" prefWidth="416.0" />
       <ListView fx:id="listViewApprentice" layoutX="459.0" layoutY="73.0" prefHeight="200.0" prefWidth="489.0" />
-      <Button layoutX="22.0" layoutY="282.0" mnemonicParsing="false" onAction="#buttonAddTrainer" text="Добавить" />
+      <Button layoutX="415.0" layoutY="308.0" mnemonicParsing="false" onAction="#buttonAddTrainer" text="Добавить" />
       <Button layoutX="204.0" layoutY="282.0" mnemonicParsing="false" onAction="#buttonDeleteTrainer" text="Удалить" />
-      <Button layoutX="459.0" layoutY="282.0" mnemonicParsing="false" onAction="#buttonAddApprentice" text="Добавить" />
-      <Button layoutX="627.0" layoutY="282.0" mnemonicParsing="false" onAction="#buttonDeleteApprentice" text="Удалить" />
       <Button layoutX="113.0" layoutY="282.0" mnemonicParsing="false" onAction="#buttonChangeTrainer" text="Изменить" />
-      <Button layoutX="546.0" layoutY="282.0" mnemonicParsing="false" onAction="#buttonChangeApprentice" text="Измеить" />
    </children>
 </AnchorPane>
