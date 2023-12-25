@@ -68,5 +68,7 @@ public class AuthorizationController {
         Stage stage = new Stage(StageStyle.DECORATED);
         stage.setScene(new Scene(loader.load()));
         stage.show();
+        Stage stage1 =(Stage) textFieldLogin.getScene().getWindow();
+        stage1.close();
     }
 }

@@ -260,10 +260,10 @@ POST localhost:8080/schedule/1?dayWeek=tuesday&start=14:00&end=16:00
 POST localhost:8080/schedule/2?dayWeek=monday&start=09:00&end=17:00
 
 ###
-POST localhost:8080/schedule/3?dayWeek=monday&start=09:00&end=17:00
+POST localhost:8080/schedule/6?dayWeek=monday&start=09:00&end=17:00
 
 ###
-POST localhost:8080/schedule/4?dayWeek=monday&start=09:00&end=17:00
+POST localhost:8080/schedule/120?dayWeek=monday&start=09:00&end=18:00
 
 ###
 GET localhost:8080/schedule/1
@@ -271,10 +271,38 @@ GET localhost:8080/schedule/1
 ###
 PUT localhost:8080/schedule/1/update?dayWeek=monday&start=09:00&end=17:00
 ###
-DELETE localhost:8080/schedule/1?day=tuesday
+DELETE localhost:8080/schedule/11?day=monday
 
 ###
-POST localhost:8080/training?idTrainer=2&idApprentice=1&numberGym=1&date=2023-12-25&startTime=09:00
+POST localhost:8080/training?idTrainer=1&idApprentice=2&numberGym=1&date=2023-12-25&startTime=09:00
+
+###
+POST localhost:8080/training?idTrainer=1&idApprentice=5&numberGym=1&date=2023-12-25&startTime=09:00
+
+###
+POST localhost:8080/training?idTrainer=6&idApprentice=15&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=1&idApprentice=5&numberGym=1&date=2023-12-25&startTime=09:00
+###
+POST localhost:8080/training?idTrainer=1&idApprentice=5&numberGym=1&date=2023-12-25&startTime=09:00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ###
 POST localhost:8080/training?idTrainer=3&idApprentice=1&numberGym=1&date=2023-12-25&startTime=09:00
 ###

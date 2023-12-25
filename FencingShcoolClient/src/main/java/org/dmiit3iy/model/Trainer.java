@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class Trainer {
-
+    @ToString.Exclude
     private long id;
 
 
@@ -39,4 +39,11 @@ public class Trainer {
     @ToString.Exclude
     private TrainerSchedule trainerSchedule;
 
+    @Override
+    public String toString() {
+        return "Фамилия: " + surname +
+                " Имя: " + name  +
+                " Отчество: " + patronymic +
+                " опыт работы: " + experience;
+    }
 }

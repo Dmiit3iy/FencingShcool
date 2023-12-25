@@ -45,6 +45,6 @@ public class Trainer {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "trainer")
     @Cascade(value = org.hibernate.annotations.CascadeType.DELETE)
     @PrimaryKeyJoinColumn
-    private TrainerSchedule trainerSсhedul;
+    private TrainerSchedule trainerSchedul;
 
 }

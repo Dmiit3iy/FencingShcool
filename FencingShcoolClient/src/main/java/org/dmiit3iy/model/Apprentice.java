@@ -33,4 +33,13 @@ public class Apprentice {
     @JsonIgnore
     @ToString.Exclude
     private List<Training> trainingList;
+
+    @Override
+    public String toString() {
+        return
+                "Фамилия: " + surname +
+                        " Имя: " + name +
+                        " Отчество:" + patronymic +
+                        " номер телефона: " + phoneNumber;
+    }
 }

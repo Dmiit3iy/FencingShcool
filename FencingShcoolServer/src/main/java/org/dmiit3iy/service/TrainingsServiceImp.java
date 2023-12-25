@@ -7,6 +7,7 @@ import org.dmiit3iy.model.Training;
 import org.dmiit3iy.repository.ApprenticeRepository;
 import org.dmiit3iy.repository.TrainerRepository;
 import org.dmiit3iy.repository.TrainingRepository;
+import org.dmiit3iy.util.Overlapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -19,36 +20,41 @@ import java.util.List;
 @Service
 public class TrainingsServiceImp implements TrainingsService {
     private TrainingRepository trainingRepository;
-    private TrainerRepository trainerRepository;
-    private ApprenticeRepository apprenticeRepository;
+    private TrainerService trainerService;
+
+    @Autowired
+    public void setApprenticeService(ApprenticeService apprenticeService) {
+        this.apprenticeService = apprenticeService;
+    }
+
+    private ApprenticeService apprenticeService;
+
+    @Autowired
+    public void setTrainerService(TrainerService trainerService) {
+        this.trainerService = trainerService;
+    }
 
     @Autowired
     public void setTrainingRepository(TrainingRepository trainingRepository) {
         this.trainingRepository = trainingRepository;
     }
 
-    @Autowired
-    public void setTrainerRepository(TrainerRepository trainerRepository) {
-        this.trainerRepository = trainerRepository;
-    }
-
-    @Autowired
-    public void setApprenticeRepository(ApprenticeRepository apprenticeRepository) {
-        this.apprenticeRepository = apprenticeRepository;
-    }
 
     @Override
     public Training add(long idTrainer, long idApprentice, int numberGym, LocalDate date, LocalTime startTime) {
-        Trainer trainer = this.trainerRepository.getById(idTrainer);
-        Apprentice apprentice = this.apprenticeRepository.getById(idApprentice);
-        if (isWorkingTime(idTrainer, date, startTime) && isGymNotFull(numberGym, date, startTime) && isTrainerBusy(idTrainer, date, startTime)) {
+        Trainer trainer = this.trainerService.get(idTrainer);
+        Apprentice apprentice = this.apprenticeService.get(idApprentice);
+        if (trainer.getTrainerSchedul().isOverLapping(date,startTime)
+                && isGymNotFull(numberGym, date, startTime)
+                && isTrainerBusy(idTrainer, date, startTime)) {
             try {
                 Training training = new Training(numberGym, trainer, apprentice, date, startTime);
                 return trainingRepository.save(training);
             } catch (DataIntegrityViolationException e) {
                 throw new IllegalArgumentException("This training is already added");
             }
-        } else throw new IllegalArgumentException("There is currently no way to sign up for a training session.");
+        } else
+            throw new IllegalArgumentException("There is currently no way to sign up for a training session.");
     }
 
     @Override
@@ -74,34 +80,34 @@ public class TrainingsServiceImp implements TrainingsService {
         return training;
     }
 
-    /**
-     * Метод для определения того, что тренировка приходится в рабочее время тренера
-     *
-     * @param idTrainer
-     * @param date
-     * @param time
-     * @return
-     */
-    public boolean isWorkingTime(long idTrainer, LocalDate date, LocalTime time) {
-
-        LocalTime timeEndOfTraining = time.plusMinutes(90);
-        String day = date.getDayOfWeek().toString().toLowerCase();
-        TrainerSchedule trainerSchedule = this.trainerRepository.getById(idTrainer).getTrainerSсhedul();
-        try {
-            Field field1 = trainerSchedule.getClass().getDeclaredField(day + "Start");
-            field1.setAccessible(true);
-            LocalTime start = (LocalTime) field1.get(trainerSchedule);
-            Field field2 = trainerSchedule.getClass().getDeclaredField(day + "End");
-            field2.setAccessible(true);
-            LocalTime end = (LocalTime) field2.get(trainerSchedule);
-            if (!isOverlapping(start, end, time, timeEndOfTraining)) {
-                throw new IllegalArgumentException("Are you trying to make an appointment outside of business hours");
-            }
-            return true;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-    }
+//    /**
+//     * Метод для определения того, что тренировка приходится в рабочее время тренера
+//     *
+//     * @param idTrainer
+//     * @param date
+//     * @param time
+//     * @return
+//     */
+//    public boolean isWorkingTime(long idTrainer, LocalDate date, LocalTime time) {
+//
+//        LocalTime timeEndOfTraining = time.plusMinutes(90);
+//        String day = date.getDayOfWeek().toString().toLowerCase();
+//        TrainerSchedule trainerSchedule = this.trainerService.get(idTrainer).getTrainerSchedul();
+//        try {
+//            Field field1 = trainerSchedule.getClass().getDeclaredField(day + "Start");
+//            field1.setAccessible(true);
+//            LocalTime start = (LocalTime) field1.get(trainerSchedule);
+//            Field field2 = trainerSchedule.getClass().getDeclaredField(day + "End");
+//            field2.setAccessible(true);
+//            LocalTime end = (LocalTime) field2.get(trainerSchedule);
+//            if (!isOverlapping(start, end, time, timeEndOfTraining)) {
+//                throw new IllegalArgumentException("Are you trying to make an appointment outside of business hours");
+//            }
+//            return true;
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            throw new IllegalArgumentException(e.getMessage());
+//        }
+//    }
 
     /**
      * Метод для расчета наполняемости зала
@@ -116,10 +122,11 @@ public class TrainingsServiceImp implements TrainingsService {
         LocalTime timeEndOfTraining = time.plusMinutes(90);
         List<Training> trainingList = this.trainingRepository.findTrainingByNumberGymAndAndDate(numberOfGym, date);
         for (Training training : trainingList) {
-            if (isOverlapping(training.getTimeStart(), training.getTimeStart().plusMinutes(90), time, timeEndOfTraining))
+            if (Overlapping.isOverlapping(training.getTimeStart(), training.getTimeStart().plusMinutes(90),
+                    time, timeEndOfTraining))
                 countOfTraining++;
         }
-        if (countOfTraining > 10) {
+        if (countOfTraining >= 10) {
             throw new IllegalArgumentException("At this time, 10 apprentices are already engaged in the gym");
         }
         return true;
@@ -131,7 +138,8 @@ public class TrainingsServiceImp implements TrainingsService {
         LocalTime timeEndOfTraining = time.plusMinutes(90);
         List<Training> trainingList = this.trainingRepository.findTrainingByTrainerIdAndDate(idTrainer, date);
         for (Training training : trainingList) {
-            if (isOverlapping(training.getTimeStart(), training.getTimeStart().plusMinutes(90), time, timeEndOfTraining))
+            if (Overlapping.isOverlapping(training.getTimeStart(),
+                    training.getTimeStart().plusMinutes(90), time, timeEndOfTraining))
                 countOfApprentice++;
         }
         if (countOfApprentice >= 3) {
@@ -140,17 +148,17 @@ public class TrainingsServiceImp implements TrainingsService {
         return true;
     }
 
-    /**
-     * Метод для определения пересечений временных отрезков
-     *
-     * @param start1
-     * @param end1
-     * @param start2
-     * @param end2
-     * @return
-     */
-    public static boolean isOverlapping(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
-        return start1.isBefore(end2) && start2.isBefore(end1);
-    }
+//    /**
+//     * Метод для определения пересечений временных отрезков
+//     *
+//     * @param start1
+//     * @param end1
+//     * @param start2
+//     * @param end2
+//     * @return
+//     */
+//    public static boolean isOverlapping(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
+//        return start1.isBefore(end2) && start2.isBefore(end1);
+//    }
 
 }

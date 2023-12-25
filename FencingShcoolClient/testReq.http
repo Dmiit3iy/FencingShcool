@@ -1,0 +1,10 @@
+POST localhost:8080/apprentice
+content-type:application/json
+
+{
+  "surname" : "Kryldov",
+  "name" : "Chdigik",
+  "patronymic" : "Yafychev",
+  "phoneNumber" : "829722724931"
+
+}

@@ -2,9 +2,13 @@ package org.dmiit3iy.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.dmiit3iy.Program;
 import org.dmiit3iy.model.User;
 import org.dmiit3iy.retrofit.UserRepository;
@@ -31,6 +35,13 @@ public class RegistrationController {
         try {
             userRepository.post(user);
             Program.showMessage("Success", "the user has been successfully registered", Alert.AlertType.INFORMATION);
+            Stage stage = (Stage) textFieldLogin.getScene().getWindow();
+            stage.close();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/authorization.fxml"));
+            Stage stage1 = new Stage(StageStyle.DECORATED);
+            stage1.setScene(new Scene(loader.load()));
+            stage1.show();
         } catch (IOException e) {
             Program.showMessage("Warning", "User is not added", Alert.AlertType.WARNING);
         }

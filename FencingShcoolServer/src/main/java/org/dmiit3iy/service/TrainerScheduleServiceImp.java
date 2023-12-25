@@ -3,17 +3,14 @@ package org.dmiit3iy.service;
 
 import org.dmiit3iy.model.Trainer;
 import org.dmiit3iy.model.TrainerSchedule;
-import org.dmiit3iy.repository.TrainerRepository;
 import org.dmiit3iy.repository.TrainerScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 
 @Service
 public class TrainerScheduleServiceImp implements TrainerScheduleService {
-    private TrainerRepository trainerRepository;
     private TrainerService trainerService;
     private TrainerScheduleRepository trainerScheduleRepository;
 
@@ -22,10 +19,7 @@ public class TrainerScheduleServiceImp implements TrainerScheduleService {
         this.trainerService = trainerService;
     }
 
-    @Autowired
-    public void setTrainerRepository(TrainerRepository trainerRepository) {
-        this.trainerRepository = trainerRepository;
-    }
+
 
     @Autowired
     public void setTrainerScheduleRepository(TrainerScheduleRepository trainerScheduleRepository) {
@@ -35,13 +29,13 @@ public class TrainerScheduleServiceImp implements TrainerScheduleService {
     //проверить
     @Override
     public TrainerSchedule add(long id, String day, LocalTime start, LocalTime end) {
-        Trainer trainer = this.trainerRepository.getById(id);
-        TrainerSchedule trainerSchedule = trainer.getTrainerSсhedul();
+        Trainer trainer = trainerService.get(id);
+        TrainerSchedule trainerSchedule = trainer.getTrainerSchedul();
         if (trainerSchedule == null) {
             trainerSchedule = new TrainerSchedule();
             trainerSchedule.setTrainer(trainer);
         }
-        trainerSchedule.setScedule(day, start, end);
+        trainerSchedule.setSchedule(day, start, end);
         this.trainerScheduleRepository.save(trainerSchedule);
         return trainerSchedule;
     }
@@ -50,7 +44,7 @@ public class TrainerScheduleServiceImp implements TrainerScheduleService {
     @Override
     public TrainerSchedule get(long id) {
         Trainer trainer = this.trainerService.get(id);
-        return  trainer.getTrainerSсhedul();
+        return  trainer.getTrainerSchedul();
     }
 
 
@@ -59,8 +53,9 @@ public class TrainerScheduleServiceImp implements TrainerScheduleService {
     public TrainerSchedule delete(long id, String day) {
         Trainer trainer = this.trainerService.get(id);
 
-        TrainerSchedule trainerSchedule = trainer.getTrainerSсhedul();
-        trainerSchedule.setScedule(day,null,null);
+        TrainerSchedule trainerSchedule = trainer.getTrainerSchedul();
+        trainerSchedule.setSchedule(day,null,null);
+        trainerScheduleRepository.save(trainerSchedule);
         return trainerSchedule;
     }
 
@@ -84,4 +79,6 @@ public class TrainerScheduleServiceImp implements TrainerScheduleService {
         this.trainerScheduleRepository.save(base);
         return trainerSchedule;
     }
+
+
 }
