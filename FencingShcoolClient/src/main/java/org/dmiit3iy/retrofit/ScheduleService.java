@@ -18,7 +18,7 @@ public interface ScheduleService {
     @PUT("/{id}/update")
     Call<ResponseResult<TrainerSchedule>> put(@Path("id") long id, @Query("dayWeek") String dayWeek,
                                               @Query("start") LocalTime start, @Query("end") LocalTime end);
-    @DELETE("/{id}")
+    @DELETE("{id}")
     Call<ResponseResult<TrainerSchedule>> delete(@Path("id") long id, @Query("day") String day);
 
 }

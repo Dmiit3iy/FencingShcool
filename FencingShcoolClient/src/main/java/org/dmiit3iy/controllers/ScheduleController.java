@@ -15,6 +15,7 @@ import org.dmiit3iy.model.TrainerSchedule;
 import org.dmiit3iy.model.TrainerScheduleForTable;
 import org.dmiit3iy.retrofit.ScheduleRepository;
 import org.dmiit3iy.retrofit.TrainerRepository;
+import org.dmiit3iy.util.Utils;
 
 import java.io.IOException;
 import java.time.LocalTime;
@@ -42,7 +43,15 @@ public class ScheduleController {
     }
 
     @FXML
-    public void buttonRemoveSchedule(ActionEvent actionEvent) {
+    public void buttonRemoveSchedule(ActionEvent actionEvent) throws IOException, NoSuchFieldException, IllegalAccessException {
+        TableView.TableViewSelectionModel<TrainerScheduleForTable> selectionModel = tableViewSchedule.getSelectionModel();
+        String day = Utils.convertDaysToEnglish(selectionModel.selectedItemProperty().get().getDay());
+        scheduleRepository.delete(trainer.getId(),day);
+
+        TrainerSchedule trainerSchedule = scheduleRepository.get(trainer.getId());
+        List<TrainerScheduleForTable> list = trainerSchedule.convertScheduleForTable();
+        ObservableList<TrainerScheduleForTable> observableList = FXCollections.observableArrayList(list);
+        tableViewSchedule.setItems(observableList);
     }
 
     @FXML
@@ -61,57 +70,35 @@ public class ScheduleController {
         this.trainerRepository.delete(trainer.getId());
         Program.showMessage("Success", "the trainer has been successfully remove", Alert.AlertType.INFORMATION);
         clearFields();
-
     }
 
 
     public void initData(Trainer trainer) throws IOException {
         try {
-        this.trainer = trainer;
+            this.trainer = trainer;
 
-        textFieldSurname.setText(trainer.getSurname());
-        textFieldName.setText(trainer.getName());
-        textFieldExperience.setText(String.valueOf(trainer.getExperience()));
-        textFieldPatronymic.setText(trainer.getPatronymic());
+            textFieldSurname.setText(trainer.getSurname());
+            textFieldName.setText(trainer.getName());
+            textFieldExperience.setText(String.valueOf(trainer.getExperience()));
+            textFieldPatronymic.setText(trainer.getPatronymic());
 
-        TrainerSchedule trainerSchedule = scheduleRepository.get(trainer.getId());
-        System.out.println(trainerSchedule);
+            TrainerSchedule trainerSchedule = scheduleRepository.get(trainer.getId());
+            System.out.println(trainerSchedule);
 
-        TableColumn<TrainerScheduleForTable, String> dayOfTheWeek = new TableColumn<>("День недели");
-        dayOfTheWeek.setCellValueFactory(new PropertyValueFactory<>("day"));
-        TableColumn<TrainerScheduleForTable, LocalTime> timeStart = new TableColumn<>("Время начала работы");
-        timeStart.setCellValueFactory(new PropertyValueFactory<>("start"));
-        TableColumn<TrainerScheduleForTable, LocalTime> timeEnd = new TableColumn<>("Время окончания работы");
-        timeEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
-        List<TrainerScheduleForTable> list =trainerSchedule.convertScheduleForTable();
-            ObservableList<TrainerScheduleForTable> observableList =FXCollections.observableArrayList(list);
+            TableColumn<TrainerScheduleForTable, String> dayOfTheWeek = new TableColumn<>("День недели");
+            dayOfTheWeek.setCellValueFactory(new PropertyValueFactory<>("day"));
+            TableColumn<TrainerScheduleForTable, LocalTime> timeStart = new TableColumn<>("Время начала работы");
+            timeStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+            TableColumn<TrainerScheduleForTable, LocalTime> timeEnd = new TableColumn<>("Время окончания работы");
+            timeEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+            List<TrainerScheduleForTable> list = trainerSchedule.convertScheduleForTable();
+            ObservableList<TrainerScheduleForTable> observableList = FXCollections.observableArrayList(list);
             tableViewSchedule.setItems(observableList);
-            tableViewSchedule.getColumns().setAll(dayOfTheWeek,timeStart,timeEnd);
+            tableViewSchedule.getColumns().setAll(dayOfTheWeek, timeStart, timeEnd);
         } catch (NoSuchFieldException | IllegalAccessException | IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-//    @FXML
-//    void initialize() {
-//        try {
-//            TrainerSchedule trainerSchedule = scheduleRepository.get(trainer.getId());
-//            TableColumn<TrainerScheduleForTable, String> dayOfTheWeek = new TableColumn<>("День недели");
-//            dayOfTheWeek.setCellValueFactory(new PropertyValueFactory<>("day"));
-//            TableColumn<TrainerScheduleForTable, LocalTime> timeStart = new TableColumn<>("Время начала работы");
-//            timeStart.setCellValueFactory(new PropertyValueFactory<>("start"));
-//            TableColumn<TrainerScheduleForTable, LocalTime> timeEnd = new TableColumn<>("Время окончания работы");
-//            timeStart.setCellValueFactory(new PropertyValueFactory<>("end"));
-//            tableViewSchedule.setItems((ObservableList<TrainerScheduleForTable>) trainerSchedule.convertScheduleForTable());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        } catch (NoSuchFieldException e) {
-//            throw new RuntimeException(e);
-//        } catch (IllegalAccessException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//    }
 
 
     public void clearFields() {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.dmiit3iy.util.Constants;
+import org.dmiit3iy.util.Utils;
 
 
 import java.lang.reflect.Field;
@@ -77,39 +78,12 @@ public class TrainerSchedule {
             Field field2 = this.getClass().getDeclaredField(Constants.dayWeek[i] + "End");
             LocalTime end = (LocalTime) field2.get(this);
             if(start!=null&&end!=null){
-                TrainerScheduleForTable trainerScheduleForTable = new TrainerScheduleForTable(convertDaysToRussia(Constants.dayWeek[i]),start,end);
+                TrainerScheduleForTable trainerScheduleForTable = new TrainerScheduleForTable(Utils.convertDaysToRussia(Constants.dayWeek[i]),start,end);
                 trainerScheduleForTableList.add(trainerScheduleForTable);
             }
         }
         return trainerScheduleForTableList;
     }
 
-    public String convertDaysToRussia(String day){
-        String russianDay="";
-        switch (day){
-            case "monday":
-                russianDay ="Понедельник";
-                break;
-            case "tuesday":
-                russianDay ="Вторник";
-                break;
-            case "wednesday":
-                russianDay ="Среда";
-                break;
-            case "thursday":
-                russianDay ="Четверг";
-                break;
-            case "friday":
-                russianDay ="Пятница";
-                break;
-            case "saturday":
-                russianDay ="Суббота";
-                break;
-            case "sunday":
-                russianDay ="Воскресенье";
-                break;
-        }
-        return russianDay;
-    }
 
 }
