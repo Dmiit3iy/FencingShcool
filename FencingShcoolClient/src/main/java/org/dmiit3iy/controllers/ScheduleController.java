@@ -1,20 +1,28 @@
 package org.dmiit3iy.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.dmiit3iy.Program;
 import org.dmiit3iy.model.Trainer;
 import org.dmiit3iy.model.TrainerSchedule;
+import org.dmiit3iy.model.TrainerScheduleForTable;
 import org.dmiit3iy.retrofit.ScheduleRepository;
 import org.dmiit3iy.retrofit.TrainerRepository;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScheduleController {
-    public TableView<TrainerSchedule> tableViewSchedule;
+    public TableView<TrainerScheduleForTable> tableViewSchedule;
 
     private ScheduleRepository scheduleRepository = new ScheduleRepository();
     private TrainerRepository trainerRepository = new TrainerRepository();
@@ -57,23 +65,53 @@ public class ScheduleController {
     }
 
 
-    public void initData(Trainer trainer) {
+    public void initData(Trainer trainer) throws IOException {
+        try {
         this.trainer = trainer;
 
         textFieldSurname.setText(trainer.getSurname());
         textFieldName.setText(trainer.getName());
         textFieldExperience.setText(String.valueOf(trainer.getExperience()));
         textFieldPatronymic.setText(trainer.getPatronymic());
+
+        TrainerSchedule trainerSchedule = scheduleRepository.get(trainer.getId());
+        System.out.println(trainerSchedule);
+
+        TableColumn<TrainerScheduleForTable, String> dayOfTheWeek = new TableColumn<>("День недели");
+        dayOfTheWeek.setCellValueFactory(new PropertyValueFactory<>("day"));
+        TableColumn<TrainerScheduleForTable, LocalTime> timeStart = new TableColumn<>("Время начала работы");
+        timeStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+        TableColumn<TrainerScheduleForTable, LocalTime> timeEnd = new TableColumn<>("Время окончания работы");
+        timeEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+        List<TrainerScheduleForTable> list =trainerSchedule.convertScheduleForTable();
+            ObservableList<TrainerScheduleForTable> observableList =FXCollections.observableArrayList(list);
+            tableViewSchedule.setItems(observableList);
+            tableViewSchedule.getColumns().setAll(dayOfTheWeek,timeStart,timeEnd);
+        } catch (NoSuchFieldException | IllegalAccessException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @FXML
-    void initialize() {
-//        TableColumn<TrainerSchedule,String> dayOfTheWeek = new TableColumn<>("День недели");
-//        dayOfTheWeek.setCellValueFactory(new PropertyValueFactory<>());
-//        TableColumn<TrainerSchedule, LocalTime> timeStart = new TableColumn<>("Время начала работы");
-//        TableColumn<TrainerSchedule,LocalTime> timeEnd = new TableColumn<>("Время окончания работы");
-//        tableViewSchedule.setItems();
-    }
+//    @FXML
+//    void initialize() {
+//        try {
+//            TrainerSchedule trainerSchedule = scheduleRepository.get(trainer.getId());
+//            TableColumn<TrainerScheduleForTable, String> dayOfTheWeek = new TableColumn<>("День недели");
+//            dayOfTheWeek.setCellValueFactory(new PropertyValueFactory<>("day"));
+//            TableColumn<TrainerScheduleForTable, LocalTime> timeStart = new TableColumn<>("Время начала работы");
+//            timeStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+//            TableColumn<TrainerScheduleForTable, LocalTime> timeEnd = new TableColumn<>("Время окончания работы");
+//            timeStart.setCellValueFactory(new PropertyValueFactory<>("end"));
+//            tableViewSchedule.setItems((ObservableList<TrainerScheduleForTable>) trainerSchedule.convertScheduleForTable());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        } catch (NoSuchFieldException e) {
+//            throw new RuntimeException(e);
+//        } catch (IllegalAccessException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//    }
 
 
     public void clearFields() {

@@ -12,7 +12,7 @@ public interface ScheduleService {
     @POST("/{id}")
     Call<ResponseResult<TrainerSchedule>> post(@Path("id") long id, @Body TrainerSchedule trainerSchedule);
 
-    @GET("/{id}")
+    @GET("{id}")
     Call<ResponseResult<TrainerSchedule>> get(@Path("id") long id);
 
     @PUT("/{id}/update")
