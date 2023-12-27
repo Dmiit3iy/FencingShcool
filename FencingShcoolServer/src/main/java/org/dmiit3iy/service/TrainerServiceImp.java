@@ -44,7 +44,8 @@ public class TrainerServiceImp implements TrainerService {
         base.setSurname(trainer.getSurname());
         base.setExperience(trainer.getExperience());
         base.setPatronymic(trainer.getPatronymic());
-        return base;
+
+        return this.trainerRepository.save(base);
     }
 
     @Override

@@ -5,17 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.OkHttpClient;
 import org.dmiit3iy.dto.ResponseResult;
-import org.dmiit3iy.model.Apprentice;
 import org.dmiit3iy.model.TrainerSchedule;
 import org.dmiit3iy.util.Constants;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-import retrofit2.http.Query;
-
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.List;
+
 
 public class ScheduleRepository {
     private ObjectMapper objectMapper;

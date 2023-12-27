@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.dmiit3iy.model.Apprentice;
@@ -18,6 +19,7 @@ import org.dmiit3iy.retrofit.ApprenticeRepository;
 import org.dmiit3iy.retrofit.TrainerRepository;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.prefs.Preferences;
 
 public class MainController {
@@ -60,6 +62,7 @@ public class MainController {
         stage1.close();
     }
 
+    @FXML
     public void buttonAddTrainer(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/add.fxml"));
         Stage stage = new Stage(StageStyle.DECORATED);
@@ -70,6 +73,7 @@ public class MainController {
         stage1.close();
     }
 
+    @FXML
     public void buttonDeleteTrainer(ActionEvent actionEvent) throws IOException {
         Trainer trainer = listViewTrainer.getSelectionModel().getSelectedItems().get(0);
         trainerRepository.delete(trainer.getId());
@@ -78,6 +82,7 @@ public class MainController {
         //listViewTrainer.refresh();
     }
 
+    @FXML
     public void buttonAddApprentice(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/addApprentice.fxml"));
         Stage stage = new Stage(StageStyle.DECORATED);
@@ -88,6 +93,7 @@ public class MainController {
         stage1.close();
     }
 
+    @FXML
     public void buttonDeleteApprentice(ActionEvent actionEvent) throws IOException {
         Apprentice apprentice = listViewApprentice.getSelectionModel().getSelectedItems().get(0);
         apprenticeRepository.delete(apprentice.getId());
@@ -95,9 +101,51 @@ public class MainController {
         this.listViewApprentice.setItems(apprenticeList);
     }
 
-    public void buttonChangeTrainer(ActionEvent actionEvent) {
+    @FXML
+    public void buttonChangeTrainer(ActionEvent actionEvent) throws IOException {
+
     }
 
+    @FXML
+
     public void buttonChangeApprentice(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void handleMouseTrainer(MouseEvent mouseEvent) throws IOException {
+        Trainer trainer = listViewTrainer.getSelectionModel().getSelectedItems().get(0);
+        System.out.println(trainer);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/schedule.fxml"));
+        Stage stage = new Stage(StageStyle.DECORATED);
+        stage.setScene(new Scene(loader.load()));
+        ScheduleController scheduleController = loader.getController();
+        scheduleController.initData(trainer);
+
+        //Действие по закрытию модальной формы
+        //Действие по закрытию модальной формы
+
+        stage.setOnCloseRequest(event -> {
+                    try {
+                        ObservableList<Trainer> trainersList1 = FXCollections.observableList(trainerRepository.get());
+                        System.out.println("по закрытию" + trainersList1);
+                        this.listViewTrainer.setItems(trainersList1);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+        );
+
+
+        stage.show();
+
+
+//        Stage stage1 = (Stage) buttonLogOff.getScene().getWindow();
+//        stage1.close();
+    }
+
+    @FXML
+    public void handleMouseApprentice(MouseEvent mouseEvent) {
     }
 }

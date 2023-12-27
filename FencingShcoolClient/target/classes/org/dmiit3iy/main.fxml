@@ -9,10 +9,9 @@
       <Label fx:id="labelGreetings" layoutX="25.0" layoutY="14.0" prefHeight="18.0" prefWidth="194.0" text="Label" />
       <Label layoutX="25.0" layoutY="55.0" prefHeight="18.0" prefWidth="142.0" text="Список  тренеров" />
       <Label layoutX="459.0" layoutY="55.0" text="Список учеников" />
-      <ListView fx:id="listViewTrainer" layoutX="22.0" layoutY="73.0" prefHeight="200.0" prefWidth="416.0" />
-      <ListView fx:id="listViewApprentice" layoutX="459.0" layoutY="73.0" prefHeight="200.0" prefWidth="489.0" />
+      <ListView fx:id="listViewTrainer" onMouseClicked="#handleMouseTrainer" layoutX="22.0" layoutY="73.0" prefHeight="200.0" prefWidth="416.0" />
+      <ListView fx:id="listViewApprentice" onMouseClicked="#handleMouseApprentice" layoutX="459.0" layoutY="73.0" prefHeight="200.0" prefWidth="489.0" />
       <Button layoutX="415.0" layoutY="308.0" mnemonicParsing="false" onAction="#buttonAddTrainer" text="Добавить" />
-      <Button layoutX="204.0" layoutY="282.0" mnemonicParsing="false" onAction="#buttonDeleteTrainer" text="Удалить" />
-      <Button layoutX="113.0" layoutY="282.0" mnemonicParsing="false" onAction="#buttonChangeTrainer" text="Изменить" />
+      <Button layoutX="212.0" layoutY="282.0" mnemonicParsing="false" onAction="#buttonDeleteTrainer" text="Удалить" />
    </children>
 </AnchorPane>

@@ -14,18 +14,14 @@ public class Trainer {
     @ToString.Exclude
     private long id;
 
-
     @NonNull
     private String surname;
-
 
     @NonNull
     private String name;
 
-
     @NonNull
     private String patronymic;
-
 
     @NonNull
     private double experience;
@@ -38,6 +34,7 @@ public class Trainer {
     @JsonIgnore
     @ToString.Exclude
     private TrainerSchedule trainerSchedule;
+
 
     @Override
     public String toString() {

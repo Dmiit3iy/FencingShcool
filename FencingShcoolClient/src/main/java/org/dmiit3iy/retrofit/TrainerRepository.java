@@ -47,6 +47,11 @@ public class TrainerRepository {
         return getData(execute);
     }
 
+    public Trainer put(Trainer trainer) throws IOException {
+        Response<ResponseResult<Trainer>> execute = this.service.put(trainer).execute();
+        return getData(execute);
+    }
+
 
     public Trainer getById(long id) throws IOException {
         Response<ResponseResult<Trainer>> execute = service.getById(id).execute();
