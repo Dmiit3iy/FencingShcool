@@ -45,6 +45,10 @@ public class ScheduleRepository {
         Response<ResponseResult<TrainerSchedule>> execute = this.service.post(id, trainerSchedule).execute();
         return getData(execute);
     }
+    public TrainerSchedule post(long id, String dayWeek, LocalTime start, LocalTime end) throws IOException {
+        Response<ResponseResult<TrainerSchedule>> execute = this.service.post(id, dayWeek, start, end).execute();
+        return getData(execute);
+    }
 
 
     public TrainerSchedule get(long id) throws IOException {

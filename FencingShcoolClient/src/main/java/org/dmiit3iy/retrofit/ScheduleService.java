@@ -9,8 +9,12 @@ import java.time.LocalTime;
 
 public interface ScheduleService {
 
-    @POST("/{id}")
+    @POST("{id}")
     Call<ResponseResult<TrainerSchedule>> post(@Path("id") long id, @Body TrainerSchedule trainerSchedule);
+
+    @POST("{id}")
+    Call<ResponseResult<TrainerSchedule>> post(@Path("id") long id, @Query("dayWeek") String dayWeek,
+                                              @Query("start") LocalTime start, @Query("end") LocalTime end);
 
     @GET("{id}")
     Call<ResponseResult<TrainerSchedule>> get(@Path("id") long id);

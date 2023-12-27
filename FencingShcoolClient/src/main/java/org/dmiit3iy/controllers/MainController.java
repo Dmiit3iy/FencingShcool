@@ -83,17 +83,6 @@ public class MainController {
     }
 
     @FXML
-    public void buttonAddApprentice(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/addApprentice.fxml"));
-        Stage stage = new Stage(StageStyle.DECORATED);
-        stage.setScene(new Scene(loader.load()));
-        stage.show();
-
-        Stage stage1 = (Stage) buttonLogOff.getScene().getWindow();
-        stage1.close();
-    }
-
-    @FXML
     public void buttonDeleteApprentice(ActionEvent actionEvent) throws IOException {
         Apprentice apprentice = listViewApprentice.getSelectionModel().getSelectedItems().get(0);
         apprenticeRepository.delete(apprentice.getId());
