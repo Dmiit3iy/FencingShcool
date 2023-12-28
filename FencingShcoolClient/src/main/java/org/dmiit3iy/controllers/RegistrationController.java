@@ -9,7 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.dmiit3iy.Program;
+import org.dmiit3iy.App;
 import org.dmiit3iy.model.User;
 import org.dmiit3iy.retrofit.UserRepository;
 
@@ -34,7 +34,7 @@ public class RegistrationController {
         User user = new User(login, password, name);
         try {
             userRepository.post(user);
-            Program.showMessage("Success", "the user has been successfully registered", Alert.AlertType.INFORMATION);
+            App.showMessage("Success", "the user has been successfully registered", Alert.AlertType.INFORMATION);
             Stage stage = (Stage) textFieldLogin.getScene().getWindow();
             stage.close();
 
@@ -43,7 +43,7 @@ public class RegistrationController {
             stage1.setScene(new Scene(loader.load()));
             stage1.show();
         } catch (IOException e) {
-            Program.showMessage("Warning", "User is not added", Alert.AlertType.WARNING);
+            App.showMessage("Warning", "User is not added", Alert.AlertType.WARNING);
         }
         finally {
             textFieldLogin.clear();

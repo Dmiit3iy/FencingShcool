@@ -10,4 +10,17 @@ content-type:application/json
 }
 
 ###
-PUT localhost:8080/
+POST localhost:8080/trainer
+content-type:application/json
+
+{
+  "surname" : "1234",
+  "name" : "dddd",
+  "patronymic" : "ddd",
+  "experience" : 2
+
+}
+
+
+###
+GET localhost:8080/schedule/1

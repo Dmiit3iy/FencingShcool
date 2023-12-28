@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.dmiit3iy.util.Constants;
-import org.dmiit3iy.util.Utils;
 
 
 import java.lang.reflect.Field;
@@ -72,13 +71,17 @@ public class TrainerSchedule {
 
     public List<TrainerScheduleForTable> convertScheduleForTable() throws NoSuchFieldException, IllegalAccessException {
         List<TrainerScheduleForTable> trainerScheduleForTableList = new ArrayList<>();
-        for (int i = 0; i < Constants.dayWeek.length; i++) {
-            Field field1 = this.getClass().getDeclaredField(Constants.dayWeek[i] + "Start");
+        for (int i = 0; i < Constants.dayWeekEng.length; i++) {
+            Field field1 = this.getClass().getDeclaredField(Constants.dayWeekEng[i] + "Start");
             LocalTime start = (LocalTime) field1.get(this);
-            Field field2 = this.getClass().getDeclaredField(Constants.dayWeek[i] + "End");
+            Field field2 = this.getClass().getDeclaredField(Constants.dayWeekEng[i] + "End");
             LocalTime end = (LocalTime) field2.get(this);
             if(start!=null&&end!=null){
-                TrainerScheduleForTable trainerScheduleForTable = new TrainerScheduleForTable(Utils.convertDaysToRussia(Constants.dayWeek[i]),start,end);
+                TrainerScheduleForTable trainerScheduleForTable
+                        = new TrainerScheduleForTable(Constants.dayWeekRus[i], Constants.dayWeekEng[i],start,end);
+                trainerScheduleForTableList.add(trainerScheduleForTable);
+            } else {
+                TrainerScheduleForTable trainerScheduleForTable= new TrainerScheduleForTable();
                 trainerScheduleForTableList.add(trainerScheduleForTable);
             }
         }

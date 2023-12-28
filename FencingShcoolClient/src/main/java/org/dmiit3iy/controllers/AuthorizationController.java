@@ -8,7 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.dmiit3iy.Program;
+import org.dmiit3iy.App;
 import org.dmiit3iy.model.User;
 import org.dmiit3iy.retrofit.UserRepository;
 
@@ -53,10 +53,10 @@ public class AuthorizationController {
                 Stage stage1 = (Stage) textFieldLogin.getScene().getWindow();
                 stage1.close();
             } else {
-                Program.showMessage("Mistake", "Incorrect login or password", Alert.AlertType.ERROR);
+                App.showMessage("Mistake", "Incorrect login or password", Alert.AlertType.ERROR);
             }
         } catch (ConnectException e) {
-            Program.showMessage("Warning", "There is no connection to the server", Alert.AlertType.WARNING);
+            App.showMessage("Warning", "There is no connection to the server", Alert.AlertType.WARNING);
         }
 
     }

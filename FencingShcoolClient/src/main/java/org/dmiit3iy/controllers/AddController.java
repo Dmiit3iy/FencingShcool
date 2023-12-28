@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.dmiit3iy.Program;
+import org.dmiit3iy.App;
 import org.dmiit3iy.model.Apprentice;
 import org.dmiit3iy.model.Trainer;
 import org.dmiit3iy.retrofit.ApprenticeRepository;
@@ -67,9 +67,9 @@ public class AddController {
             Trainer trainer = new Trainer(surname, name, patronymic, experience);
             try {
                 this.trainerRepository.post(trainer);
-                Program.showMessage("Success", "Success adding a trainer", Alert.AlertType.INFORMATION);
+                App.showMessage("Success", "Success adding a trainer", Alert.AlertType.INFORMATION);
             } catch (IOException e) {
-                Program.showMessage("Warning", "Error adding a trainer", Alert.AlertType.WARNING);
+                App.showMessage("Warning", "Error adding a trainer", Alert.AlertType.WARNING);
             }
 
         } else {
@@ -81,9 +81,9 @@ public class AddController {
             Apprentice apprentice = new Apprentice(surname, name, patronymic, phone);
             try {
                 this.apprenticeRepository.post(apprentice);
-                Program.showMessage("Success", "Success adding a apprentice", Alert.AlertType.INFORMATION);
+                App.showMessage("Success", "Success adding a apprentice", Alert.AlertType.INFORMATION);
             } catch (IOException e) {
-                Program.showMessage("Warning", "Error adding a apprentice", Alert.AlertType.WARNING);
+                App.showMessage("Warning", "Error adding a apprentice", Alert.AlertType.WARNING);
             }
         }
         textFieldVar.clear();

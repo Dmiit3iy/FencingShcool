@@ -83,7 +83,7 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.dmiit3iy.Program</mainClass>
+                            <mainClass>org.dmiit3iy.App</mainClass>
                         </configuration>
                     </execution>
                 </executions>

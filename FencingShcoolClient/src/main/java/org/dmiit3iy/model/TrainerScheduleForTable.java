@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class TrainerScheduleForTable {
     private String day;
+    private String dayEng;
     private LocalTime start;
     private LocalTime end;
 }
