@@ -39,6 +39,7 @@ public class AuthorizationController {
                 Stage stage = new Stage(StageStyle.DECORATED);
                 stage.setScene(new Scene(loader.load()));
 
+
                 MainController mainController =loader.getController();
                 mainController.initData(user);
 

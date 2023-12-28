@@ -19,7 +19,6 @@ import org.dmiit3iy.retrofit.ApprenticeRepository;
 import org.dmiit3iy.retrofit.TrainerRepository;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.prefs.Preferences;
 
 public class MainController {
@@ -91,16 +90,6 @@ public class MainController {
     }
 
     @FXML
-    public void buttonChangeTrainer(ActionEvent actionEvent) throws IOException {
-
-    }
-
-    @FXML
-
-    public void buttonChangeApprentice(ActionEvent actionEvent) {
-    }
-
-    @FXML
     public void handleMouseTrainer(MouseEvent mouseEvent) throws IOException {
         Trainer trainer = listViewTrainer.getSelectionModel().getSelectedItems().get(0);
         System.out.println(trainer);
@@ -135,6 +124,34 @@ public class MainController {
     }
 
     @FXML
-    public void handleMouseApprentice(MouseEvent mouseEvent) {
+    public void handleMouseApprentice(MouseEvent mouseEvent) throws IOException {
+        Apprentice apprentice = listViewApprentice.getSelectionModel().getSelectedItems().get(0);
+
+        System.out.println(apprentice);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/apprentice.fxml"));
+        Stage stage = new Stage(StageStyle.DECORATED);
+        stage.setScene(new Scene(loader.load()));
+        ApprenticeController apprenticeController = loader.getController();
+        apprenticeController.initData(apprentice);
+
+        //Действие по закрытию модальной формы
+        //Действие по закрытию модальной формы
+
+        stage.setOnCloseRequest(event -> {
+                    try {
+                        ObservableList<Apprentice> apprenticesList1 = FXCollections.observableList(apprenticeRepository.get());
+                        System.out.println("по закрытию" + apprenticesList1);
+                        this.listViewApprentice.setItems(apprenticesList1);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+        );
+
+
+        stage.show();
+
     }
 }

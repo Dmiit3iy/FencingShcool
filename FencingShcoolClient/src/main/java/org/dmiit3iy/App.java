@@ -21,7 +21,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
 
         if (isAuthorization()){
-            scene = new Scene(loadFXML("main"), 640, 480);
+            scene = new Scene(loadFXML("main"), 1000, 480);
         } else {
             scene = new Scene(loadFXML("authorization"), 640, 480);
         }
