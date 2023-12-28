@@ -19,7 +19,7 @@ public interface ApprenticeService {
     Call<ResponseResult<Apprentice>> getById(@Path("id") long id);
 
     @PUT(".")
-    Call<ResponseResult<Apprentice>> put(@Body Trainer trainer);
+    Call<ResponseResult<Apprentice>> put(@Body Apprentice apprentice);
 
     @DELETE("{id}")
     Call<ResponseResult<Apprentice>> delete(@Path("id") long id);

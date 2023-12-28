@@ -97,7 +97,7 @@ public class ScheduleController {
         trainer.setExperience(Double.parseDouble(textFieldExperience.getText()));
         this.trainerRepository.put(trainer);
         App.showMessage("Success", "the trainer has been successfully update", Alert.AlertType.INFORMATION);
-        clearFields();
+       // clearFields();
     }
 
     @FXML

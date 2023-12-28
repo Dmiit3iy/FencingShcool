@@ -57,6 +57,10 @@ public class ApprenticeRepository {
         return getData(execute);
     }
 
+    public Apprentice update(Apprentice apprentice) throws IOException {
+        Response<ResponseResult<Apprentice>> execute = service.put(apprentice).execute();
+        return getData(execute);
+    }
     public Apprentice delete(long id) throws IOException {
         Response<ResponseResult<Apprentice>> execute = service.delete(id).execute();
         return getData(execute);
