@@ -27,7 +27,7 @@ import java.util.List;
 public class ApprenticeController {
     private TrainingRepository trainingRepository = new TrainingRepository();
     private ApprenticeRepository apprenticeRepository = new ApprenticeRepository();
-    private List<Training> trainingArrayList;
+    private List<Training> trainingArrayList = new ArrayList<>();
     public TextField textFieldSurname;
     public TextField textFieldName;
     public TextField textFieldPatronymic;
