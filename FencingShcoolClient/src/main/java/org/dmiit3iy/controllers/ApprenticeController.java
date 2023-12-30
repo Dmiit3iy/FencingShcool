@@ -32,7 +32,7 @@ public class ApprenticeController {
     public TextField textFieldName;
     public TextField textFieldPatronymic;
     public TextField textFieldPhone;
-    public ListView listViewTraining;
+    public ListView <Training> listViewTraining;
 
     private Apprentice apprentice;
 
@@ -43,14 +43,14 @@ public class ApprenticeController {
         apprentice.setPatronymic(textFieldPatronymic.getText());
         apprentice.setPhoneNumber(textFieldPhone.getText());
         this.apprenticeRepository.update(apprentice);
-        App.showMessage("Success", "the trainer has been successfully update", Alert.AlertType.INFORMATION);
+        App.showMessage("Success", "the apprentice has been successfully update", Alert.AlertType.INFORMATION);
         clearFields();
     }
 
     @FXML
     public void buttonRemoveApprentice(ActionEvent actionEvent) throws IOException {
         this.apprenticeRepository.delete(apprentice.getId());
-        App.showMessage("Success", "the trainer has been successfully delete", Alert.AlertType.INFORMATION);
+        App.showMessage("Success", "the apprentice has been successfully delete", Alert.AlertType.INFORMATION);
         clearFields();
     }
 
@@ -76,7 +76,19 @@ public class ApprenticeController {
     }
 
     @FXML
-    public void buttonRemoveTraining(ActionEvent actionEvent) {
+    public void buttonRemoveTraining(ActionEvent actionEvent) throws IOException {
+
+        try {
+            trainingRepository.delete(listViewTraining.getSelectionModel().getSelectedItems().get(0).getId());
+            App.showMessage("Success", "training has been successfully delete", Alert.AlertType.INFORMATION);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        trainingRepository.getByIdApprentice(apprentice.getId());
+        ObservableList<Training> observableList = FXCollections.observableArrayList(trainingArrayList);
+        listViewTraining.setItems(observableList);
+
     }
 
     public void initData(Apprentice apprentice) {
@@ -88,6 +100,8 @@ public class ApprenticeController {
         try {
             if (!trainingRepository.getByIdApprentice(apprentice.getId()).isEmpty()) {
                 trainingArrayList.addAll(trainingRepository.getByIdApprentice(apprentice.getId()));
+                ObservableList<Training> observableList = FXCollections.observableArrayList(trainingArrayList);
+                listViewTraining.setItems(observableList);
                 System.out.println(trainingArrayList);
             }
         } catch (IOException e) {

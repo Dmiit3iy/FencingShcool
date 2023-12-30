@@ -3,12 +3,14 @@ package org.dmiit3iy.controllers;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import org.dmiit3iy.App;
 import org.dmiit3iy.model.Apprentice;
 import org.dmiit3iy.model.Trainer;
@@ -60,11 +62,20 @@ public class AddController {
         if (selection.getText().equals("Тренер")) {
 
             String surname = textFieldSurname.getText();
+
             String name = textFieldName.getText();
             String patronymic = textFieldPatronymic.getText();
-            double experience = Double.parseDouble(textFieldVar.getText());
-
-            Trainer trainer = new Trainer(surname, name, patronymic, experience);
+            String experience = textFieldVar.getText();
+            if (surname.isEmpty() || name.isEmpty() || patronymic.isEmpty() || experience.isEmpty()) {
+                App.showMessage("Alyarma!", "All field must be filled in!", Alert.AlertType.ERROR);
+                return;
+            }
+            if(!experience.matches("((-|\\+)?[0-9]+(\\.[0-9]+)?)+")){
+                App.showMessage("Alyarma!", "experience field must be a number!", Alert.AlertType.ERROR);
+                textFieldVar.clear();
+                return;
+            }
+            Trainer trainer = new Trainer(surname, name, patronymic, Double.parseDouble(experience));
             try {
                 this.trainerRepository.post(trainer);
                 App.showMessage("Success", "Success adding a trainer", Alert.AlertType.INFORMATION);
@@ -77,7 +88,15 @@ public class AddController {
             String name = textFieldName.getText();
             String patronymic = textFieldPatronymic.getText();
             String phone = textFieldVar.getText();
-
+            if (surname.isEmpty() || name.isEmpty() || patronymic.isEmpty() || phone.isEmpty()) {
+                App.showMessage("Alyarma!", "All field must be filled in!", Alert.AlertType.ERROR);
+                return;
+            }
+            if(!phone.matches("\\d{11}")){
+                App.showMessage("Alyarma!", "Enter the number in the format: 89190000001", Alert.AlertType.ERROR);
+                textFieldVar.clear();
+                return;
+            }
             Apprentice apprentice = new Apprentice(surname, name, patronymic, phone);
             try {
                 this.apprenticeRepository.post(apprentice);
@@ -91,12 +110,12 @@ public class AddController {
         textFieldPatronymic.clear();
         textFieldSurname.clear();
 
-        Stage stage = (Stage) textFieldVar.getScene().getWindow();
-        stage.close();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/main.fxml"));
-        Stage stage1 = new Stage(StageStyle.DECORATED);
-        stage1.setScene(new Scene(loader.load()));
-        stage1.show();
+//        Stage stage = (Stage) textFieldVar.getScene().getWindow();
+//        stage.close();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/main.fxml"));
+//        Stage stage1 = new Stage(StageStyle.DECORATED);
+//        stage1.setScene(new Scene(loader.load()));
+//        stage1.show();
     }
 
 

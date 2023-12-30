@@ -8,7 +8,7 @@
       <DatePicker fx:id="datePicker" layoutX="14.0" layoutY="103.0" />
       <ComboBox fx:id="comboBoxTrainer" layoutX="110.0" layoutY="29.0" prefHeight="26.0" prefWidth="446.0" />
       <ComboBox fx:id="comboBoxTime" layoutX="406.0" layoutY="103.0" prefWidth="150.0" />
-      <TextField fx:id="textFieldNumberGum" layoutX="367.0" layoutY="165.0" prefHeight="26.0" prefWidth="38.0" />
+      <TextField fx:id="textFieldNumberGym" layoutX="367.0" layoutY="165.0" prefHeight="26.0" prefWidth="38.0" />
       <Label layoutX="250.0" layoutY="107.0" text="Свободное время" />
       <Label layoutX="286.0" layoutY="169.0" text="Номер зала" />
       <Button layoutX="58.0" layoutY="245.0" mnemonicParsing="false" onAction="#buttonAddTraining" text="Добавить тренировку" />

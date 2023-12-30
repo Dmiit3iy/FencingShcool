@@ -21,7 +21,7 @@ public class Training {
 
     @NonNull
     private int numberGym;
-    @JsonIgnore
+    //@JsonIgnore
     @NonNull
 
     private Trainer trainer;
@@ -40,4 +40,10 @@ public class Training {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime timeStart;
 
+    @Override
+    public String toString() {
+        return "Дата: " + date+ " "+timeStart +" тренер: "+ trainer.getSurname()+" "+trainer.getName().substring(0,1)+
+                "."+trainer.getSurname().substring(0,1)+". зал: "+numberGym;
+
+    }
 }

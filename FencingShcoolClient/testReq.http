@@ -24,3 +24,14 @@ content-type:application/json
 
 ###
 GET localhost:8080/schedule/1
+
+###
+POST localhost:8080/training
+content-type:application/json
+{
+"idTrainer": 1,
+"idApprentice": 1,
+"numberGym": 2,
+"date": ,
+                                                        @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime startTime){
+}

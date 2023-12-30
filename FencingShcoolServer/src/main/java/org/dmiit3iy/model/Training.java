@@ -22,7 +22,7 @@ public class Training {
     @Column(nullable = false)
     @NonNull
     private int numberGym;
-    @JsonIgnore
+   // @JsonIgnore
     @NonNull
     @ManyToOne
     @JoinColumn(name = "trainer_id", nullable = false)
