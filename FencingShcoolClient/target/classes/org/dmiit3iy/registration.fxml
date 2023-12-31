@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dmiit3iy.controllers.RegistrationController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dmiit3iy.controllers.RegistrationController">
    <children>
       <Button layoutX="247.0" layoutY="254.0" mnemonicParsing="false" onAction="#buttonRegistration" text="Registraiton" />
       <TextField fx:id="textFieldLogin" layoutX="212.0" layoutY="77.0" />

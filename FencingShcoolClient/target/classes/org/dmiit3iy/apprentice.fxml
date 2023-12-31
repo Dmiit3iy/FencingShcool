@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dmiit3iy.controllers.ApprenticeController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0"  stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dmiit3iy.controllers.ApprenticeController">
     <children>
         <Label layoutX="30.0" layoutY="34.0" />
         <Label layoutX="30.0" layoutY="67.0" text="Имя" />

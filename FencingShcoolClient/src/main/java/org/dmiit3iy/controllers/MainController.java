@@ -35,7 +35,7 @@ public class MainController {
     ApprenticeRepository apprenticeRepository = new ApprenticeRepository();
     UserRepository userRepository = new UserRepository();
 
-    public void initData(User user) {
+    public void initData(User user)  {
         this.user = user;
         labelGreetings.setText("Приветствую, " + user.getName() + "!");
     }
@@ -44,9 +44,6 @@ public class MainController {
     void initialize() {
 
         try {
-            Preferences userIDlog = Preferences.userRoot();
-            int userId = Integer.parseInt(userIDlog.get("userID", "-1"));
-            labelGreetings.setText("Приветствую, " + userRepository.get(userId).getName() + "!");
 
             ObservableList<Trainer> trainersList = FXCollections.observableList(trainerRepository.get());
             this.listViewTrainer.setItems(trainersList);
@@ -55,6 +52,18 @@ public class MainController {
             this.listViewApprentice.setItems(apprenticesList);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+
+        if (user==null) {
+            Preferences userIDlog = Preferences.userRoot();
+            int userId = Integer.parseInt(userIDlog.get("userID", "-1"));
+            //  System.out.println(userId);
+            try {
+                labelGreetings.setText("Приветствую, " + userRepository.get(userId).getName() + "!");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
