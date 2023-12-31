@@ -68,6 +68,28 @@ public class TrainingController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<ResponseResult<List<LocalTime>>> getLocalTime(@RequestParam long idTrainer, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+                                                                        @RequestParam int numberGym){
+        try {
+            List<LocalTime> localTimeList = this.trainingsService.getTime(idTrainer,date,numberGym);
+            return new ResponseEntity<>(new ResponseResult<>(null, localTimeList), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new ResponseResult<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/freetime")
+    public ResponseEntity<ResponseResult<Boolean>> getAnyFreeTime(@RequestParam long idTrainer, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
+        try {
+            Boolean freeTime = this.trainingsService.getAnyFreeTime(idTrainer,date);
+            return new ResponseEntity<>(new ResponseResult<>(null, freeTime), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new ResponseResult<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<ResponseResult<Training>> delete(@PathVariable long id){
         try {

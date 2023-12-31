@@ -15,7 +15,10 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class TrainingsServiceImp implements TrainingsService {
@@ -44,9 +47,9 @@ public class TrainingsServiceImp implements TrainingsService {
     public Training add(long idTrainer, long idApprentice, int numberGym, LocalDate date, LocalTime startTime) {
         Trainer trainer = this.trainerService.get(idTrainer);
         Apprentice apprentice = this.apprenticeService.get(idApprentice);
-        if (trainer.getTrainerSchedul().isOverLapping(date,startTime)
+        if (trainer.getTrainerSchedul().isOverLapping(date, startTime)
                 && isGymNotFull(numberGym, date, startTime)
-                && isTrainerBusy(idTrainer, date, startTime)) {
+                && !isTrainerBusy(idTrainer, date, startTime)) {
             try {
                 Training training = new Training(numberGym, trainer, apprentice, date, startTime);
                 return trainingRepository.save(training);
@@ -79,6 +82,52 @@ public class TrainingsServiceImp implements TrainingsService {
         this.trainingRepository.deleteById(id);
         return training;
     }
+
+    @Override
+    public List<LocalTime> getTime(long idTrainer, LocalDate date, int numGym) {
+        List<LocalTime> timeList = new ArrayList<>();
+        Trainer trainer = this.trainerService.get(idTrainer);
+        String dateOfTheWeek = date.getDayOfWeek().toString().toLowerCase();
+        TrainerSchedule trainerSchedule = trainer.getTrainerSchedul();
+        LocalTime[] localTimes = trainerSchedule.getTimePeriod(dateOfTheWeek);
+        LocalTime start = localTimes[0];
+        System.out.println(start);
+        System.out.println(localTimes[1]);
+        while (start.isBefore(localTimes[1])) {
+            //если свободно то добавлять нет 3 трен и 10 человек в зале
+            if (!isTrainerBusy(trainer.getId(), date, start) && isGymNotFull(numGym, date, start)) {
+                timeList.add(start);
+            }
+            start = start.plusMinutes(90);
+        }
+
+
+        return timeList;
+    }
+
+    @Override
+    public Boolean getAnyFreeTime(long idTrainer, LocalDate date) {
+        List<LocalTime> timeList = new ArrayList<>();
+        Trainer trainer = this.trainerService.get(idTrainer);
+        String dateOfTheWeek = date.getDayOfWeek().toString().toLowerCase();
+        TrainerSchedule trainerSchedule = trainer.getTrainerSchedul();
+        LocalTime[] localTimes = trainerSchedule.getTimePeriod(dateOfTheWeek);
+        LocalTime start = localTimes[0];
+        System.out.println(start);
+        System.out.println(localTimes[1]);
+        while (start.isBefore(localTimes[1])) {
+            //если свободно то добавлять нет 3 трен и 10 человек в зале
+            if (!isTrainerBusy(trainer.getId(), date, start)) {
+                timeList.add(start);
+            }
+            start = start.plusMinutes(90);
+        }
+
+        if (timeList.isEmpty()) {
+            return false;
+        } else return true;
+    }
+
 
 //    /**
 //     * Метод для определения того, что тренировка приходится в рабочее время тренера
@@ -143,9 +192,10 @@ public class TrainingsServiceImp implements TrainingsService {
                 countOfApprentice++;
         }
         if (countOfApprentice >= 3) {
-            throw new IllegalArgumentException("The coach has already enrolled 3 apprentice");
+            //throw new IllegalArgumentException("The coach has already enrolled 3 apprentice");
+            return true;
         }
-        return true;
+        return false;
     }
 
 //    /**

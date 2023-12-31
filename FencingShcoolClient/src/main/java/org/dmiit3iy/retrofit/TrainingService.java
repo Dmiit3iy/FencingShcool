@@ -27,4 +27,11 @@ public interface TrainingService {
 
     @DELETE("{id}")
     Call<ResponseResult<Training>> delete(@Path("id") long id);
+
+    @GET(".")
+    Call<ResponseResult<List<LocalTime>>> getTime(@Query("idTrainer") long idTrainer,@Query("date") LocalDate date,
+                                              @Query("numberGym") int numberGym);
+
+    @GET("freetime")
+    Call<ResponseResult<Boolean>> getAnyFeeTime(@Query("idTrainer") long idTrainer,@Query("date") LocalDate date);
 }

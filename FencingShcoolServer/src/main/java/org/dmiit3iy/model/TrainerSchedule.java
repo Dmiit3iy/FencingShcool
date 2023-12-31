@@ -101,4 +101,17 @@ public class TrainerSchedule {
         return false;
     }
 
+    public LocalTime[] getTimePeriod(String day) {
+        try {
+            Field field1 = this.getClass().getDeclaredField(day + "Start");
+            LocalTime start = (LocalTime) field1.get(this);
+            Field field2 = this.getClass().getDeclaredField(day + "End");
+            LocalTime end = (LocalTime) field2.get(this);
+            return new LocalTime[]{start, end};
+        } catch (NoSuchFieldException e) {
+            throw new IllegalArgumentException();
+        } catch (IllegalAccessException e) {
+        }
+        return null;
+    }
 }

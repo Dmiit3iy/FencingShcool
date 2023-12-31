@@ -23,7 +23,9 @@ public class AuthorizationController {
     public TextField textFieldPassword;
     private String login;
     private String password;
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    private Preferences pref = Preferences.userNodeForPackage(App.class);
 
     @FXML
     public void buttonEnter(ActionEvent actionEvent) throws IOException {
@@ -33,23 +35,15 @@ public class AuthorizationController {
         User user = null;
         try {
             user = userRepository.get(login, password);
-
+            pref.putLong("userID", user.getId());
             if (user != null) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/main.fxml"));
                 Stage stage = new Stage(StageStyle.DECORATED);
                 stage.setScene(new Scene(loader.load()));
-
-
-                MainController mainController =loader.getController();
-                mainController.initData(user);
-
-                Preferences userlog = Preferences.userRoot();
-                Preferences userIDlog = Preferences.userRoot();
-                String userID = String.valueOf(user.getId());
-                userlog.putBoolean("authorization", true);
-                userIDlog.put("userID", userID);
                 textFieldPassword.clear();
                 textFieldLogin.clear();
+                MainController mainController = loader.getController();
+                mainController.initData(user);
                 stage.show();
                 Stage stage1 = (Stage) textFieldLogin.getScene().getWindow();
                 stage1.close();

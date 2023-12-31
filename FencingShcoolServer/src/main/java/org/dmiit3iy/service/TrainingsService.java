@@ -14,4 +14,7 @@ public interface TrainingsService {
     List<Training> getByApprenticeId(long id);
     Training delete(long id);
 
+    List<LocalTime> getTime (long idTrainer, LocalDate date, int numGym);
+    Boolean getAnyFreeTime (long idTrainer, LocalDate date);
+
 }

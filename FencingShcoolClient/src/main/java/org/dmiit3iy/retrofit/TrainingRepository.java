@@ -61,6 +61,15 @@ public class TrainingRepository {
         return getData(execute);
     }
 
+    public List<LocalTime> getTime(long idTrainer,LocalDate date, int numberGym) throws IOException {
+        Response<ResponseResult<List<LocalTime>>> execute = service.getTime(idTrainer,date,numberGym).execute();
+        return getData(execute);
+    }
+    public Boolean getAnyFreeTime(long idTrainer,LocalDate date) throws IOException {
+        Response<ResponseResult<Boolean>> execute = service.getAnyFeeTime(idTrainer,date).execute();
+        return getData(execute);
+    }
+
     public List<Training> getByIdApprentice(long id) throws IOException {
         Response<ResponseResult<List<Training>>> execute = service.getByApprenticeId(id).execute();
         return getData(execute);

@@ -37,7 +37,7 @@ public class AddTrainingController {
 
     public void buttonAddTraining(ActionEvent actionEvent) {
         try {
-            trainingRepository.post(trainer.getId(),apprentice.getId(), Integer.parseInt(textFieldNumberGym.getText()),datePicker.getValue(),(LocalTime) comboBoxTime.getValue());
+            trainingRepository.post(trainer.getId(), apprentice.getId(), Integer.parseInt(textFieldNumberGym.getText()), datePicker.getValue(), (LocalTime) comboBoxTime.getValue());
             App.showMessage("Susses", "The training was successfully added", Alert.AlertType.INFORMATION);
             textFieldNumberGym.clear();
             comboBoxTime.getItems().clear();
@@ -47,6 +47,7 @@ public class AddTrainingController {
             App.showMessage("Alyarma!!", e.getMessage(), Alert.AlertType.INFORMATION);
         }
     }
+
     public void initData(Apprentice apprentice) {
         this.apprentice = apprentice;
     }
@@ -64,13 +65,13 @@ public class AddTrainingController {
                             App.showMessage("Attention", "First, select the trainer", Alert.AlertType.INFORMATION);
                         }
 
-
                     }
                 }
             });
 
 
             this.textFieldNumberGym.setOnMouseClicked(mouseEvent -> {
+
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 1) {
                         LocalDate date = datePicker.getValue();
@@ -85,23 +86,19 @@ public class AddTrainingController {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 1) {
                         String numGym = textFieldNumberGym.getText();
+                        if (!numGym.matches("((-|\\+)?[0-9]+(\\.[0-9]+)?)+")) {
+                            App.showMessage("Alyarma!", "Gym number field must be a number!", Alert.AlertType.ERROR);
+                            textFieldNumberGym.clear();
+                            return;
+                        }
                         if (numGym.isEmpty()) {
                             App.showMessage("Attention", "First, select the gym number!", Alert.AlertType.INFORMATION);
                         } else {
                             if (!textFieldNumberGym.getText().isEmpty()) {
+
                                 try {
-                                    TrainerScheduleForTable trainerScheduleForTable = scheduleRepository.get(trainer.getId()).convertScheduleForTable().stream().
-                                            filter(x -> x.getDayEng() != null).filter(z -> z.getDayEng().equals(datePicker.getValue().getDayOfWeek().toString().toLowerCase())).
-                                            collect(Collectors.toList()).get(0);
-                                    LocalTime start = trainerScheduleForTable.getStart();
-                                    LocalTime end = trainerScheduleForTable.getEnd();
-                                    List<LocalTime> timeList = new ArrayList<>();
-                                    while (start.isBefore(end)) {
-                                        timeList.add(start);
-                                        start = start.plusMinutes(90);
-                                    }
-                                    comboBoxTime.setItems(FXCollections.observableList(timeList));
-                                } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+                                    comboBoxTime.setItems(FXCollections.observableList(trainingRepository.getTime(trainer.getId(), datePicker.getValue(), Integer.parseInt(textFieldNumberGym.getText()))));
+                                } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
 
@@ -129,7 +126,13 @@ public class AddTrainingController {
                                 List<String> listWD = trainerScheduleForTableList.stream().map(x -> x.getDayEng().toUpperCase()).collect(Collectors.toList());
                                 System.out.println(listWD);
                                 System.out.println(listWD.contains(date.getDayOfWeek().toString()));
-                                setDisable(!listWD.contains(date.getDayOfWeek().toString()) || date.compareTo(LocalDate.now()) < 0);
+                                //   trainingRepository.getTime(trainer.getId(),date,Integer.parseInt(textFieldNumberGym.getText())).isEmpty();
+                                //setDisable(!listWD.contains(date.getDayOfWeek().toString()) || date.compareTo(LocalDate.now()) < 0);
+                                //||   trainingRepository.getTime(trainer.getId(),date,Integer.parseInt(textFieldNumberGym.getText())).isEmpty()
+                                if (!listWD.contains(date.getDayOfWeek().toString()) || date.compareTo(LocalDate.now()) < 0||!trainingRepository.getAnyFreeTime(trainer.getId(),date)) {
+                                    setDisable(true);
+                                    setStyle("-fx-background-color: #ff1943;");
+                                }
                             }
                         }
                     } catch (NoSuchFieldException | IllegalAccessException | IOException e) {

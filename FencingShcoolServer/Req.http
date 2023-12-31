@@ -286,6 +286,8 @@ POST localhost:8080/training?idTrainer=1&idApprentice=5&numberGym=1&date=2023-12
 ###
 POST localhost:8080/training?idTrainer=1&idApprentice=5&numberGym=1&date=2023-12-25&startTime=09:00
 
+###
+GET  localhost:8080/training?idTrainer=1&date=2024-01-08&numberGym=1
 
 
 

@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import org.dmiit3iy.App;
 import org.dmiit3iy.model.Apprentice;
 import org.dmiit3iy.model.Trainer;
 import org.dmiit3iy.model.User;
@@ -30,10 +31,11 @@ public class MainController {
     public Label labelGreetings;
     public ListView<Trainer> listViewTrainer;
     public ListView<Apprentice> listViewApprentice;
-    User user;
+    private User user;
     TrainerRepository trainerRepository = new TrainerRepository();
     ApprenticeRepository apprenticeRepository = new ApprenticeRepository();
     UserRepository userRepository = new UserRepository();
+    private Preferences pref = Preferences.userNodeForPackage(App.class);
 
     public void initData(User user)  {
         this.user = user;
@@ -54,27 +56,20 @@ public class MainController {
             throw new RuntimeException(e);
         }
 
-
-        if (user==null) {
-            Preferences userIDlog = Preferences.userRoot();
-            int userId = Integer.parseInt(userIDlog.get("userID", "-1"));
-            //  System.out.println(userId);
-            try {
-                labelGreetings.setText("Приветствую, " + userRepository.get(userId).getName() + "!");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        long id = pref.getLong("userID",-1);
+        System.out.println(id);
+        try {
+            labelGreetings.setText("Приветствую, " +  userRepository.get(id).getName() + "!");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
 
     }
 
     @FXML
     public void buttonLogOff(ActionEvent actionEvent) {
-        Preferences userlog = Preferences.userRoot();
-        userlog.put("authorization", "null");
-        Preferences userIDlog = Preferences.userRoot();
-        userlog.putBoolean("authorization", false);
-        userIDlog.put("userID", "-1");
+        pref.remove("userID");
         Stage stage1 = (Stage) buttonLogOff.getScene().getWindow();
         stage1.close();
     }
@@ -102,8 +97,7 @@ public class MainController {
         });
 
         stage.show();
-//        Stage stage1 = (Stage) buttonLogOff.getScene().getWindow();
-//        stage1.close();
+
     }
 
     @FXML

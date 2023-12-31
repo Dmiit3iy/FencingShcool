@@ -14,13 +14,14 @@ import java.util.prefs.Preferences;
  * JavaFX App
  */
 public class App extends Application {
+    private Preferences pref = Preferences.userNodeForPackage(App.class);
 
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
 
-        if (isAuthorization()){
+        if (pref.getLong("userID",-1)!=-1){
             scene = new Scene(loadFXML("main"), 1000, 480);
         } else {
             scene = new Scene(loadFXML("authorization"), 640, 480);
@@ -51,13 +52,5 @@ public class App extends Application {
         alert.showAndWait();
     }
 
-    /**
-     * Метод для проверки авторизации
-     * @return
-     */
-    public static boolean isAuthorization() {
-        Preferences userlog = Preferences.userRoot();
-        return userlog.getBoolean("authorization", false);
-    }
 
 }
