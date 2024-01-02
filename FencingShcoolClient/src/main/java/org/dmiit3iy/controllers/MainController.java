@@ -25,7 +25,7 @@ import org.dmiit3iy.retrofit.UserRepository;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
-public class MainController {
+public class MainController implements ControllerData<User> {
 
     public Button buttonLogOff;
     public Label labelGreetings;
@@ -37,7 +37,7 @@ public class MainController {
     UserRepository userRepository = new UserRepository();
     private Preferences pref = Preferences.userNodeForPackage(App.class);
 
-    public void initData(User user)  {
+    public void initData(User user) {
         this.user = user;
         labelGreetings.setText("Приветствую, " + user.getName() + "!");
     }
@@ -46,7 +46,6 @@ public class MainController {
     void initialize() {
 
         try {
-
             ObservableList<Trainer> trainersList = FXCollections.observableList(trainerRepository.get());
             this.listViewTrainer.setItems(trainersList);
 
@@ -56,30 +55,32 @@ public class MainController {
             throw new RuntimeException(e);
         }
 
-        long id = pref.getLong("userID",-1);
+        long id = pref.getLong("userID", -1);
         System.out.println(id);
         try {
-            labelGreetings.setText("Приветствую, " +  userRepository.get(id).getName() + "!");
+            labelGreetings.setText("Приветствую, " + userRepository.get(id).getName() + "!");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     @FXML
     public void buttonLogOff(ActionEvent actionEvent) {
         pref.remove("userID");
-        Stage stage1 = (Stage) buttonLogOff.getScene().getWindow();
-        stage1.close();
+        try {
+            App.openWindow("authorization.fxml", "", null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        App.closeWindow(actionEvent);
     }
 
     @FXML
     public void buttonAddTrainer(ActionEvent actionEvent) throws IOException {
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/add.fxml"));
         Stage stage = new Stage(StageStyle.DECORATED);
         stage.setScene(new Scene(loader.load()));
-
 
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
@@ -97,18 +98,13 @@ public class MainController {
         });
 
         stage.show();
-
     }
 
     @FXML
     public void buttonDeleteUser(ActionEvent actionEvent) throws IOException {
         userRepository.delete(user.getId());
-        Stage stage = (Stage) buttonLogOff.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/authorization.fxml"));
-        Stage stage2 = new Stage(StageStyle.DECORATED);
-        stage2.setScene(new Scene(loader.load()));
-        stage.close();
-        stage2.show();
+        App.openWindow("authorization.fxml", "", null);
+        App.closeWindow(actionEvent);
 
     }
 
@@ -124,9 +120,6 @@ public class MainController {
         ScheduleController scheduleController = loader.getController();
         scheduleController.initData(trainer);
 
-        //Действие по закрытию модальной формы
-        //Действие по закрытию модальной формы
-
         stage.setOnCloseRequest(event -> {
                     try {
                         ObservableList<Trainer> trainersList1 = FXCollections.observableList(trainerRepository.get());
@@ -135,20 +128,15 @@ public class MainController {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
                 }
         );
-
-
         stage.show();
-
 
     }
 
     @FXML
     public void handleMouseApprentice(MouseEvent mouseEvent) throws IOException {
         Apprentice apprentice = listViewApprentice.getSelectionModel().getSelectedItems().get(0);
-
         System.out.println(apprentice);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/apprentice.fxml"));
@@ -156,9 +144,6 @@ public class MainController {
         stage.setScene(new Scene(loader.load()));
         ApprenticeController apprenticeController = loader.getController();
         apprenticeController.initData(apprentice);
-
-        //Действие по закрытию модальной формы
-        //Действие по закрытию модальной формы
 
         stage.setOnCloseRequest(event -> {
                     try {
@@ -168,12 +153,8 @@ public class MainController {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
                 }
         );
-
-
         stage.show();
-
     }
 }

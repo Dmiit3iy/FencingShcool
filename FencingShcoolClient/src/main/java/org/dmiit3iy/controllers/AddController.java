@@ -70,7 +70,7 @@ public class AddController {
                 App.showMessage("Alyarma!", "All field must be filled in!", Alert.AlertType.ERROR);
                 return;
             }
-            if(!experience.matches("((-|\\+)?[0-9]+(\\.[0-9]+)?)+")){
+            if (!experience.matches("((-|\\+)?[0-9]+(\\.[0-9]+)?)+")) {
                 App.showMessage("Alyarma!", "experience field must be a number!", Alert.AlertType.ERROR);
                 textFieldVar.clear();
                 return;
@@ -92,7 +92,7 @@ public class AddController {
                 App.showMessage("Alyarma!", "All field must be filled in!", Alert.AlertType.ERROR);
                 return;
             }
-            if(!phone.matches("\\d{11}")){
+            if (!phone.matches("\\d{11}")) {
                 App.showMessage("Alyarma!", "Enter the number in the format: 89190000001", Alert.AlertType.ERROR);
                 textFieldVar.clear();
                 return;
@@ -110,13 +110,5 @@ public class AddController {
         textFieldPatronymic.clear();
         textFieldSurname.clear();
 
-//        Stage stage = (Stage) textFieldVar.getScene().getWindow();
-//        stage.close();
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/main.fxml"));
-//        Stage stage1 = new Stage(StageStyle.DECORATED);
-//        stage1.setScene(new Scene(loader.load()));
-//        stage1.show();
     }
-
-
 }

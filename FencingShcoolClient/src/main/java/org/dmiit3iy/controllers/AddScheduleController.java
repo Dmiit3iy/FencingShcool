@@ -53,19 +53,14 @@ public class AddScheduleController {
     public void initData(TrainerSchedule trainerSchedule, Trainer trainer) {
         this.trainerSchedule = trainerSchedule;
         this.trainer = trainer;
-
-
     }
 
 
     @FXML
     void initialize() {
-        //!!!
         Set<String> daysRussia = Constants.weekDays.keySet();
-
         ObservableList<String> days = FXCollections.observableArrayList(daysRussia);
         comboBoxDays.setItems(days);
-
 
         List<LocalTime> listLocalTime = new ArrayList<>();
         LocalTime startWorkingDay = LocalTime.of(07, 00);

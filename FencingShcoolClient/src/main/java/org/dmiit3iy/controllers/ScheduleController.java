@@ -53,9 +53,16 @@ public class ScheduleController {
         stage.setOnCloseRequest(event -> {
                     try {
                         TrainerSchedule trainerSchedule1 = scheduleRepository.get(trainer.getId());
-                        List<TrainerScheduleForTable> list = trainerSchedule1.convertScheduleForTable();
-                        ObservableList<TrainerScheduleForTable> observableList = FXCollections.observableArrayList(list);
-                        tableViewSchedule.setItems(observableList);
+                        if(trainerSchedule1!=null) {
+                            List<TrainerScheduleForTable> list = trainerSchedule1.convertScheduleForTable();
+                            ObservableList<TrainerScheduleForTable> observableList = FXCollections.observableArrayList(list);
+                            tableViewSchedule.setItems(observableList);
+                        } else {
+                            TrainerSchedule emptyTrainerSchedule = new TrainerSchedule();
+                            List<TrainerScheduleForTable> list = emptyTrainerSchedule .convertScheduleForTable();
+                            ObservableList<TrainerScheduleForTable> observableList = FXCollections.observableArrayList(list);
+                            tableViewSchedule.setItems(observableList);
+                        }
 
                     } catch (IllegalAccessException | NoSuchFieldException | IOException e) {
                         throw new RuntimeException(e);
@@ -85,7 +92,6 @@ public class ScheduleController {
         }
       else {
           App.showMessage("Wow!","To delete it, select a row in the table.", Alert.AlertType.INFORMATION);
-
       }
     }
 
@@ -97,7 +103,6 @@ public class ScheduleController {
         trainer.setExperience(Double.parseDouble(textFieldExperience.getText()));
         this.trainerRepository.put(trainer);
         App.showMessage("Success", "the trainer has been successfully update", Alert.AlertType.INFORMATION);
-       // clearFields();
     }
 
     @FXML
@@ -133,19 +138,16 @@ public class ScheduleController {
                     ObservableList<TrainerScheduleForTable> observableList = FXCollections.observableArrayList(list);
                     tableViewSchedule.setItems(observableList);
                 }
-
         } catch (NoSuchFieldException | IllegalAccessException | IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     public void clearFields() {
         textFieldSurname.clear();
         textFieldName.clear();
         textFieldPatronymic.clear();
         textFieldExperience.clear();
-
     }
 
 }

@@ -35,21 +35,10 @@ public class RegistrationController {
         try {
             userRepository.post(user);
             App.showMessage("Success", "the user has been successfully registered", Alert.AlertType.INFORMATION);
-            Stage stage = (Stage) textFieldLogin.getScene().getWindow();
-            stage.close();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dmiit3iy/authorization.fxml"));
-            Stage stage1 = new Stage(StageStyle.DECORATED);
-            stage1.setScene(new Scene(loader.load()));
-            stage1.show();
+            App.closeWindow(actionEvent);
+            App.openWindow("authorization.fxml", "", null);
         } catch (IOException e) {
             App.showMessage("Warning", "User is not added", Alert.AlertType.WARNING);
         }
-        finally {
-            textFieldLogin.clear();
-            textFieldName.clear();
-            textFieldPassword.clear();
-        }
-
     }
 }
